@@ -1,6 +1,6 @@
 import React from "react";
-import image from "../../../../../public/assets/images/image.png";
-import image1 from "../../../../../public/assets/images/sanpham1.webp";
+import image from "../../../../images/image.png";
+import image1 from "../../../../images/sanpham1.webp";
 
 const Index = ({
   categories = [],
@@ -28,7 +28,7 @@ const Index = ({
               type="submit"
               className="btn btn-outline-light text-dark m-1"
             >
-              abc
+              abc2
             </button>
             <button
               className="btn btn-outline-light text-dark m-1"
