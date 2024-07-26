@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+<<<<<<< Updated upstream
 import Image1 from "../../../../images/sanpham1.webp";
+=======
+import Image1 from '../../../../images/sanpham1.webp';
+>>>>>>> Stashed changes
 
 const Cart = ({ cartItems, total }) => {
   return (

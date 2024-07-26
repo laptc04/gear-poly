@@ -1,6 +1,12 @@
 import React from "react";
+<<<<<<< Updated upstream
 import image from "../../../../images/image.png";
 import image1 from "../../../../images/sanpham1.webp";
+=======
+
+import image from '../../../../images/image.png';
+import image1 from '../../../../images/sanpham1.webp';
+>>>>>>> Stashed changes
 
 const Index = ({
   categories = [],
