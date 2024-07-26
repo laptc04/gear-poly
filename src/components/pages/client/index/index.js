@@ -37,13 +37,31 @@ const Index = ({
           </div>
           <div className="carousel-inner ">
             <div className="carousel-item active">
-              <img src={image} className="d-block w-100" alt="Slide 1" width="600px" height="500px" />
+              <img
+                src={image}
+                className="d-block w-100"
+                alt="Slide 1"
+                width="600px"
+                height="500px"
+              />
             </div>
             <div className="carousel-item">
-              <img src="../images/banner2.png" className="d-block w-100" alt="Slide 2" width="600px" height="300px" />
+              <img
+                src="../images/banner2.png"
+                className="d-block w-100"
+                alt="Slide 2"
+                width="600px"
+                height="300px"
+              />
             </div>
             <div className="carousel-item ">
-              <img src="../images/banner3.png" className="d-block w-100" alt="Slide 3" width="600px" height="300px" />
+              <img
+                src="../images/banner3.png"
+                className="d-block w-100"
+                alt="Slide 3"
+                width="600px"
+                height="300px"
+              />
             </div>
           </div>
           <button
@@ -52,7 +70,10 @@ const Index = ({
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide="prev"
           >
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
             <span className="visually-hidden">Previous</span>
           </button>
           <button
@@ -61,15 +82,25 @@ const Index = ({
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide="next"
           >
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
             <span className="visually-hidden">Next</span>
           </button>
         </div>
 
-        <form className="d-flex ms-auto" action="/searchMinMaxIndex" method="get">
+        <form
+          className="d-flex ms-auto"
+          action="/searchMinMaxIndex"
+          method="get"
+        >
           <div className="d-flex m-4 align-items-center">
-           
-            <select className="form-control me-2" name="minPrice" style={{ width: "170px" }}>
+            <select
+              className="form-control me-2"
+              name="minPrice"
+              style={{ width: "170px" }}
+            >
               <option value="" disabled selected>
                 Giá thấp nhất
               </option>
@@ -80,7 +111,11 @@ const Index = ({
               <option value="4000000">4,000,000</option>
               <option value="5000000">5,000,000</option>
             </select>
-            <select className="form-control me-2" name="maxPrice" style={{ width: "170px" }}>
+            <select
+              className="form-control me-2"
+              name="maxPrice"
+              style={{ width: "170px" }}
+            >
               <option value="" disabled selected>
                 Giá cao nhất
               </option>
@@ -92,20 +127,20 @@ const Index = ({
               <option value="30000000">30,000,000</option>
             </select>
             <select
-            className="rounded me-2"
-            style={{ width: "190px", height: "37px" }}
-            name="categories_id"
-            onChange={(e) => e.target.form.submit()}
-          >
-            <option selected value="-1">
-              Tìm theo danh mục
-            </option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.categories_name}
+              className="rounded me-2"
+              style={{ width: "190px", height: "37px" }}
+              name="categories_id"
+              onChange={(e) => e.target.form.submit()}
+            >
+              <option selected value="-1">
+                Tìm theo danh mục
               </option>
-            ))}
-          </select>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.categories_name}
+                </option>
+              ))}
+            </select>
             <button className="btn btn-outline-success" type="submit">
               Tìm
             </button>
@@ -113,104 +148,153 @@ const Index = ({
         </form>
 
         <div className="container">
-            <h1>Sản phẩm nổi bật</h1>
+          <h1>Sản phẩm nổi bật</h1>
           <div className="row">
-            <div className="card m-3" style={{ width: '18rem' }}>
-              <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 1</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="/ProductDetail" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="/ProductDetail" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 2</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 3</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 4</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
-
-
-
           </div>
 
-
           <div className="row mt-2">
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 5</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 6</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 7</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: '18rem' }}>
-            <center><img src={image1} className="card-img-top" alt="Example" style={{ width: '15rem' , height: '15rem'}} /></center> 
+            <div className="card m-3" style={{ width: "18rem" }}>
+              <center>
+                <img
+                  src={image1}
+                  className="card-img-top"
+                  alt="Example"
+                  style={{ width: "15rem", height: "15rem" }}
+                />
+              </center>
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 8</h5>
-                <p className="card-text">
-                  Mô tả sản phẩm
-                </p>
-                <a href="#" className="btn btn-primary">Mua</a>
+                <p className="card-text">Mô tả sản phẩm</p>
+                <a href="#" className="btn btn-primary">
+                  Mua
+                </a>
               </div>
             </div>
-
-
-
           </div>
 
           {/* {products.length === 0 ? (
@@ -255,25 +339,47 @@ const Index = ({
             <div className="col-2">
               <nav aria-label="Page navigation example">
                 <ul className="pagination">
-                  <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                  <li
+                    className={`page-item ${
+                      currentPage === 0 ? "disabled" : ""
+                    }`}
+                  >
                     <a
                       className="page-link"
-                      href={`/user/index?page=${currentPage > 0 ? currentPage - 1 : 0}&size=6`}
+                      href={`/user/index?page=${
+                        currentPage > 0 ? currentPage - 1 : 0
+                      }&size=6`}
                     >
-                     <AiOutlineDoubleLeft />
+                      <AiOutlineDoubleLeft />
                     </a>
                   </li>
                   {Array.from({ length: totalPages }, (_, i) => (
-                    <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
-                      <a className="page-link" href={`/user/index?page={i}&size=6`}>
+                    <li
+                      key={i}
+                      className={`page-item ${
+                        i === currentPage ? "active" : ""
+                      }`}
+                    >
+                      <a
+                        className="page-link"
+                        href={`/user/index?page={i}&size=6`}
+                      >
                         {i + 1}
                       </a>
                     </li>
                   ))}
-                  <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
+                  <li
+                    className={`page-item ${
+                      currentPage === totalPages - 1 ? "disabled" : ""
+                    }`}
+                  >
                     <a
                       className="page-link"
-                      href={`/user/index?page=${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1}&size=6`}
+                      href={`/user/index?page=${
+                        currentPage < totalPages - 1
+                          ? currentPage + 1
+                          : totalPages - 1
+                      }&size=6`}
                     >
                       <AiOutlineDoubleRight />
                     </a>
@@ -285,39 +391,6 @@ const Index = ({
           </div>
         </div>
       </div>
-      <footer className="bg-dark text-light py-4 mt-5">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-4">
-            <h5>Contact Us</h5>
-            <p>Email: support@gearly.com</p>
-            <p>Phone: +123 456 7890</p>
-          </div>
-          <div className="col-md-4">
-            <h5>Follow Us</h5>
-            <a href="#" className="text-light me-3">
-              <i className="fa-brands fa-facebook-f"></i>
-            </a>
-            <a href="#" className="text-light me-3">
-              <i className="fa-brands fa-twitter"></i>
-            </a>
-            <a href="#" className="text-light me-3">
-              <i className="fa-brands fa-instagram"></i>
-            </a>
-            <a href="#" className="text-light me-3">
-              <i className="fa-brands fa-linkedin-in"></i>
-            </a>
-          </div>
-          <div className="col-md-4">
-            <h5>About Us</h5>
-            <p>GearPoly is a leading e-commerce platform providing a variety of products at competitive prices. Our mission is to deliver the best shopping experience for our customers.</p>
-          </div>
-        </div>
-        <div className="text-center mt-3">
-          <p>&copy; 2024 GearPoly. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
     </div>
   );
 };
