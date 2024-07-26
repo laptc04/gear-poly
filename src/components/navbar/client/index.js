@@ -27,7 +27,7 @@ const NavbarClient = () => {
               style={{ width: '500px' }}
             />
             <button type="submit" className="btn btn-outline-dark  m-1">
-              <i><AiOutlineSearch /></i>
+            <i><AiOutlineSearch /></i>
             </button>
             <button className="btn btn-outline-dark  m-1" type="submit">
             <i><AiOutlineBell /></i> 

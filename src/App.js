@@ -1,12 +1,15 @@
 import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  RouterProvider,
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import NavbarClient from '../src/components/navbar/client/index';
+import { Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes } from "react-router-dom";
+// import {
+//   RouterProvider,
+//   Route,
+//   createBrowserRouter,
+//   createRoutesFromElements,
+// } from "react-router-dom";
 
 //client
 import Laphoadon from "./components/pages/client/bills/laphoadon";
@@ -27,34 +30,41 @@ import Product from "./components/pages/Admin/products/product";
 import Categoties from "./components/pages/Admin/categories/categories";
 
 function App() {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route>
-        {/*  */}
-        <Route path="/" element={<div></div>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/changepass" element={<ChangePassword />} />
-        {/*  */}
-        <Route path="/index" element={<Index />} />
-        <Route path="/laphoadon" element={<Laphoadon />} />
-        <Route path="/ttnguoidung" element={<TTngdung />} />
-        <Route path="/chitiethoadon" element={<Chitiethoadon />} />
-        <Route path="/kho" element={<Kho />} />
-        <Route path="/quanlyuser" element={<Qluser />} />
-        <Route path="/thongke" element={<ThongKeTongChiTieu />} />
-        <Route path="/ProductDetail" element={<ProductDetail />} />
-        <Route path="/Cart" element={<Cart />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/categories" element={<Categoties />} />
-      </Route>
-    )
-  );
+  // const router = createBrowserRouter(
+  //   createRoutesFromElements(
+  //     <Route>
+  //       {/*  */}
+
+  //       <Route path="/login" element={<Login />} />
+  //       <Route path="/register" element={<Register />} />
+  //       <Route path="/changepass" element={<ChangePassword />} />
+  //       {/*  */}
+  //       <Route path="/" element={<Index />} />
+  //       <Route path="/laphoadon" element={<Laphoadon />} />
+  //       <Route path="/ttnguoidung" element={<TTngdung />} />
+  //       <Route path="/chitiethoadon" element={<Chitiethoadon />} />
+  //       <Route path="/kho" element={<Kho />} />
+  //       <Route path="/quanlyuser" element={<Qluser />} />
+  //       <Route path="/thongke" element={<ThongKeTongChiTieu />} />
+  //       <Route path="/ProductDetail" element={<ProductDetail />} />
+  //       <Route path="/Cart" element={<Cart />} />
+  //       <Route path="/product" element={<Product />} />
+  //       <Route path="/categories" element={<Categoties />} />
+  //     </Route>
+  //   )
+  // );
 
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+    <Router>
+      <div>
+        <NavbarClient/>
+        <div className="NavbarClient">
+          <Routes >
+            <Route path="/" element={<Index />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 
