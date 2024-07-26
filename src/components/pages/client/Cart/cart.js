@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image1 from "../../../../../public/assets/images/sanpham1.webp";
+import Image1 from "../../../../images/sanpham1.webp";
 
 const Cart = ({ cartItems, total }) => {
   return (
