@@ -71,8 +71,8 @@ const Qluser = () => {
                                     </thead>
                                     <tbody>
                                     <tr>
-                                            <td>ID</td>
-                                            <td width="150">Họ và tên</td>
+                                            <td>123</td>
+                                            <td width="150">Tien</td>
                                             <td>Email</td>
                                             <td width="20">Ảnh</td>
                                             <td width="300">Địa chỉ</td>
