@@ -1,0 +1,25 @@
+.register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGNvbXB1dGVyJTIwYWNjZXNzb3JpZXN8ZW58MHx8fHwxNjg5Njc3OTY1&ixlib=rb-1.2.1&q=80&w=1080');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.register-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-top: 50px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.register-title a {
+    text-decoration: none;
+    color: black;
+}
+.form-label {
+    font-weight: bold;
+}
