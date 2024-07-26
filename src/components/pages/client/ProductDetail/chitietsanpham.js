@@ -1,10 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import image1 from "../../../../images/sanpham1.webp";
-<<<<<<< HEAD
 
-=======
->>>>>>> phu
 const ProductDetail = ({ productID }) => {
   return (
     <div className="container">

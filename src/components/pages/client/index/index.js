@@ -1,12 +1,7 @@
 import React from "react";
 import image from "../../../../images/image.png";
 import image1 from "../../../../images/sanpham1.webp";
-<<<<<<< HEAD
 
-=======
-import { AiOutlineDoubleLeft } from "react-icons/ai";
-import { AiOutlineDoubleRight } from "react-icons/ai";
->>>>>>> phu
 const Index = ({
   categories = [],
   products = [],
@@ -15,6 +10,156 @@ const Index = ({
 }) => {
   return (
     <div>
+      <nav className="navbar fixed-top p-0">
+        <div className="container-fluid bg-danger">
+          <a className="navbar-brand" href="/index">
+            GearPoly
+          </a>
+          <div className="d-flex align-items-center m-3">
+            <input
+              name="product_name"
+              className="form-control "
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              style={{ width: "500px" }}
+            />
+            <button
+              type="submit"
+              className="btn btn-outline-light text-dark m-1"
+            >
+              abc2
+            </button>
+            <button
+              className="btn btn-outline-light text-dark m-1"
+              type="submit"
+            >
+              abc<i class="fa-regular fa-bell"></i>
+            </button>
+            <button
+              className="btn btn-outline-light text-dark m-1"
+              type="submit"
+            >
+              abc <i className="fa-solid fa-circle-up"></i>
+            </button>
+            <a href="/cart" className="btn btn-outline-light text-dark m-1">
+              giỏ hàng <i className="fa-solid fa-cart-shopping"></i>
+            </a>
+            <a href="/ttnguoidung">
+              <img
+                id="profileImage"
+                src="/images/profile.png"
+                alt="Profile"
+                className="rounded-circle"
+                style={{ height: "35px", width: "35px", marginTop: "5px" }}
+              />
+            </a>
+          </div>
+          <div>
+            <button
+              className="navbar-toggler bg-light"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div
+              className="offcanvas offcanvas-end"
+              tabIndex="-1"
+              id="offcanvasNavbar"
+              aria-labelledby="offcanvasNavbarLabel"
+            >
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasNavbarLabel">
+                  GearPoly
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="offcanvas-body">
+                <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li className="nav-item">
+                    <a
+                      className="nav-link active"
+                      aria-current="page"
+                      href="/user/index"
+                    >
+                      <i className="fa-solid fa-house m-1"></i>Home
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link g-black" href="#">
+                      <i className="fa-solid fa-heart m-1"></i> My favorites
+                    </a>
+                  </li>
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i className="fa-solid fa-bars m-1"></i> My account
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <a className="dropdown-item" href="/login">
+                          <i className="fa-solid fa-right-to-bracket m-1"></i>{" "}
+                          Login
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/user/quenmatkhau">
+                          <i className="fa-solid fa-question m-1"></i> Forgot
+                          Password
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/register">
+                          <i className="fa-solid fa-registered m-1"></i>{" "}
+                          Registration
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/logout">
+                          <i className="fa-solid fa-outdent m-1"></i> Logoff
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/changePassword">
+                          <i className="fa-solid fa-gears m-1"></i> Change
+                          Password
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="/user/nguoidung">
+                          <i className="fa-solid fa-gears m-1"></i> Edit Profile
+                        </a>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Something else here
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
       <div className=" pt-5">
         <div id="carouselExampleIndicators" className="carousel slide mt-3">
           <div className="carousel-indicators">
@@ -46,7 +191,7 @@ const Index = ({
                 className="d-block w-100"
                 alt="Slide 1"
                 width="600px"
-                height="500px"
+                height="300px"
               />
             </div>
             <div className="carousel-item">
@@ -152,17 +297,9 @@ const Index = ({
         </form>
 
         <div className="container">
-          <h1>Sản phẩm nổi bật</h1>
           <div className="row">
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 1</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -173,14 +310,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 2</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -191,14 +321,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 3</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -209,14 +332,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 4</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -229,14 +345,7 @@ const Index = ({
 
           <div className="row mt-2">
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 5</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -247,14 +356,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 6</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -265,14 +367,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 7</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -283,14 +378,7 @@ const Index = ({
             </div>
 
             <div className="card m-3" style={{ width: "18rem" }}>
-              <center>
-                <img
-                  src={image1}
-                  className="card-img-top"
-                  alt="Example"
-                  style={{ width: "15rem", height: "15rem" }}
-                />
-              </center>
+              <img src={image1} className="card-img-top" alt="Example" />
               <div className="card-body">
                 <h5 className="card-title">Sản phẩm 8</h5>
                 <p className="card-text">Mô tả sản phẩm</p>
@@ -354,7 +442,7 @@ const Index = ({
                         currentPage > 0 ? currentPage - 1 : 0
                       }&size=6`}
                     >
-                      <AiOutlineDoubleLeft />
+                      Previous
                     </a>
                   </li>
                   {Array.from({ length: totalPages }, (_, i) => (
@@ -385,7 +473,7 @@ const Index = ({
                           : totalPages - 1
                       }&size=6`}
                     >
-                      <AiOutlineDoubleRight />
+                      Next
                     </a>
                   </li>
                 </ul>
@@ -395,6 +483,43 @@ const Index = ({
           </div>
         </div>
       </div>
+      <footer className="bg-dark text-light py-4 mt-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4">
+              <h5>Contact Us</h5>
+              <p>Email: support@gearly.com</p>
+              <p>Phone: +123 456 7890</p>
+            </div>
+            <div className="col-md-4">
+              <h5>Follow Us</h5>
+              <a href="#" className="text-light me-3">
+                <i className="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="#" className="text-light me-3">
+                <i className="fa-brands fa-twitter"></i>
+              </a>
+              <a href="#" className="text-light me-3">
+                <i className="fa-brands fa-instagram"></i>
+              </a>
+              <a href="#" className="text-light me-3">
+                <i className="fa-brands fa-linkedin-in"></i>
+              </a>
+            </div>
+            <div className="col-md-4">
+              <h5>About Us</h5>
+              <p>
+                GearPoly is a leading e-commerce platform providing a variety of
+                products at competitive prices. Our mission is to deliver the
+                best shopping experience for our customers.
+              </p>
+            </div>
+          </div>
+          <div className="text-center mt-3">
+            <p>&copy; 2024 GearPoly. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
