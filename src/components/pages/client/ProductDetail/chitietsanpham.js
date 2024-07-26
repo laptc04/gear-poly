@@ -1,12 +1,7 @@
-<<<<<<< Updated upstream
 import React from "react";
 import Button from "react-bootstrap/Button";
 import image1 from "../../../../images/sanpham1.webp";
-=======
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import image1 from '../../../../images/sanpham1.webp';
->>>>>>> Stashed changes
+
 const ProductDetail = ({ productID }) => {
   return (
     <div className="container">
