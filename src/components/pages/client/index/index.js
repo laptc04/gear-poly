@@ -12,7 +12,7 @@ const Index = ({
   totalPages = 1,
 }) => {
   return (
-    <div>
+    <div className="bg-body-tertiary">
       <div className=" pt-5">
         <div id="carouselExampleIndicators" className="carousel slide mt-3">
           <div className="carousel-indicators">
@@ -92,7 +92,14 @@ const Index = ({
           </button>
         </div>
 
-        <form
+       
+
+        <div className="row">
+              <div className="col-1">
+
+              </div>
+              <div className="col-10">
+              <form
           className="d-flex ms-auto"
           action="/searchMinMaxIndex"
           method="get"
@@ -148,11 +155,10 @@ const Index = ({
             </button>
           </div>
         </form>
-
         <div className="container">
           <h1>Sản phẩm nổi bật</h1>
           <div className="row">
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -170,7 +176,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -188,7 +194,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -206,7 +212,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -226,7 +232,7 @@ const Index = ({
           </div>
 
           <div className="row mt-2">
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -244,7 +250,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -262,7 +268,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -280,7 +286,7 @@ const Index = ({
               </div>
             </div>
 
-            <div className="card m-3" style={{ width: "18rem" }}>
+            <div className="card m-3" style={{ width: "17rem" }}>
               <center>
                 <img
                   src={image1}
@@ -392,6 +398,14 @@ const Index = ({
             <div className="col-5"></div>
           </div>
         </div>
+              </div>
+              <div className="col-1">
+
+              </div>
+
+        </div>
+
+       
       </div>
     </div>
   );
