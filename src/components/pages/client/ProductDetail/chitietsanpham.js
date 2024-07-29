@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import image1 from '../images/sanpham1.webp';
+import image1 from "../../../../images/sanpham1.webp";
 const ProductDetail = ({ productID }) => {
   return (
     <div className="container">

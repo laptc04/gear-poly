@@ -31,12 +31,11 @@ function App() {
     createRoutesFromElements(
       <Route>
         {/*  */}
-        <Route path="/" element={<div></div>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/changepass" element={<ChangePassword />} />
         {/*  */}
-        <Route path="/index" element={<Index />} />
+        <Route path="/" element={<Index />} />
         <Route path="/laphoadon" element={<Laphoadon />} />
         <Route path="/ttnguoidung" element={<TTngdung />} />
         <Route path="/chitiethoadon" element={<Chitiethoadon />} />
