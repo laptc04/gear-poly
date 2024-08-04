@@ -9,7 +9,7 @@ const NavbarClient = () => {
     <div>
       <nav className="navbar fixed-top p-0">
         <div className="container-fluid bg-white">
-          <a className="navbar-brand" href="/index">
+          <a className="navbar-brand" href="/">
             <img
               id="profileImage"
               src={GearPoly}
@@ -37,7 +37,7 @@ const NavbarClient = () => {
                 <AiOutlineBell />
               </i>
             </button>
-            <a href="/cart" className="btn btn-outline-dark  m-1">
+            <a href="/user/cart" className="btn btn-outline-dark  m-1">
               <i>
                 <CiShoppingCart />
               </i>
