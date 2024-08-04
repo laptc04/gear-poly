@@ -5,6 +5,7 @@ import image1 from "../../../../images/sanpham1.webp";
 
 import { AiOutlineDoubleLeft } from "react-icons/ai";
 import { AiOutlineDoubleRight } from "react-icons/ai";
+import { FaStar } from "react-icons/fa";
 
 
 const Index = ({
@@ -187,11 +188,12 @@ const Index = ({
                         />
                       </center>
                       <div className="card-body">
-                        <h5 className="card-title">{Listproducts.product_name}</h5>
-                        <p className="card-text">Mô tả sản phẩm</p>
-                        <p className="text-danger">{Listproducts.price}</p>
-                        <a href="/ProductDetail" className="btn btn-primary">
-                          Mua
+                        <h6 className="card-title">{Listproducts.product_name}</h6>
+                        <p className="card-text">{Listproducts.description}</p>
+                        <p className="text-danger">{Listproducts.price} VNĐ</p>
+                        <p className="text-warning">0.0 <FaStar /></p>
+                        <a href={`ProductDetail/${Listproducts.id}`} className="btn btn-primary">
+                          Xem chi tiết
                         </a>
                       </div>
                     </div>
