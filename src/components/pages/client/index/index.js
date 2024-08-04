@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { listIndex } from '../../../../services/ListIndex';
 import image from "../../../../images/image.png";
 import image1 from "../../../../images/sanpham1.webp";
 
 import { AiOutlineDoubleLeft } from "react-icons/ai";
 import { AiOutlineDoubleRight } from "react-icons/ai";
+import { FaStar } from "react-icons/fa";
+
 
 const Index = ({
   categories = [],
   products = [],
   currentPage = 0,
   totalPages = 1,
+
+
+
+
+
 }) => {
+  const [Listproducts, setProducts] = useState([])
+
+  useEffect(() => {
+    listIndex().then((Response) => {
+      setProducts(Response.data);
+    }).catch(error => {
+      console.error(error);
+    })
+  }, [])
+
   return (
     <div className="bg-body-tertiary">
       <div className=" pt-5">
@@ -92,8 +110,12 @@ const Index = ({
           </button>
         </div>
 
+
+
         <div className="row">
-          <div className="col-1"></div>
+          <div className="col-1">
+
+          </div>
           <div className="col-10">
             <form
               className="d-flex ms-auto"
@@ -154,146 +176,36 @@ const Index = ({
             <div className="container">
               <h1>Sản phẩm nổi bật</h1>
               <div className="row">
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 1</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="/ProductDetail" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 2</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 3</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 4</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
+                {
+                  Listproducts.map((Listproducts) =>
+                    <div className="card m-3" style={{ width: "17.5rem" }}>
+                      <center>
+                        <img
+                          src={image1}
+                          className="card-img-top"
+                          alt="Example"
+                          style={{ width: "15rem", height: "15rem" }}
+                        />
+                      </center>
+                      <div className="card-body">
+                        <h6 className="card-title">{Listproducts.product_name}</h6>
+                        <p className="card-text">{Listproducts.description}</p>
+                        <p className="text-danger">{Listproducts.price} VNĐ</p>
+                        <p className="text-warning">0.0 <FaStar /></p>
+                        <a href={`ProductDetail/${Listproducts.id}`} className="btn btn-primary">
+                          Xem chi tiết
+                        </a>
+                      </div>
+                    </div>
+                  )
+
+                }
+
+
+
               </div>
 
-              <div className="row mt-2">
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 5</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 6</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 7</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-                <div className="card m-3" style={{ width: "17rem" }}>
-                  <center>
-                    <img
-                      src={image1}
-                      className="card-img-top"
-                      alt="Example"
-                      style={{ width: "15rem", height: "15rem" }}
-                    />
-                  </center>
-                  <div className="card-body">
-                    <h5 className="card-title">Sản phẩm 8</h5>
-                    <p className="card-text">Mô tả sản phẩm</p>
-                    <a href="#" className="btn btn-primary">
-                      Mua
-                    </a>
-                  </div>
-                </div>
-              </div>
+
 
               {/* {products.length === 0 ? (
             <p>Không tìm thấy sản phẩm nào.</p>
@@ -338,15 +250,13 @@ const Index = ({
                   <nav aria-label="Page navigation example">
                     <ul className="pagination">
                       <li
-                        className={`page-item ${
-                          currentPage === 0 ? "disabled" : ""
-                        }`}
+                        className={`page-item ${currentPage === 0 ? "disabled" : ""
+                          }`}
                       >
                         <a
                           className="page-link"
-                          href={`/user/index?page=${
-                            currentPage > 0 ? currentPage - 1 : 0
-                          }&size=6`}
+                          href={`/user/index?page=${currentPage > 0 ? currentPage - 1 : 0
+                            }&size=6`}
                         >
                           <AiOutlineDoubleLeft />
                         </a>
@@ -354,9 +264,8 @@ const Index = ({
                       {Array.from({ length: totalPages }, (_, i) => (
                         <li
                           key={i}
-                          className={`page-item ${
-                            i === currentPage ? "active" : ""
-                          }`}
+                          className={`page-item ${i === currentPage ? "active" : ""
+                            }`}
                         >
                           <a
                             className="page-link"
@@ -367,17 +276,15 @@ const Index = ({
                         </li>
                       ))}
                       <li
-                        className={`page-item ${
-                          currentPage === totalPages - 1 ? "disabled" : ""
-                        }`}
+                        className={`page-item ${currentPage === totalPages - 1 ? "disabled" : ""
+                          }`}
                       >
                         <a
                           className="page-link"
-                          href={`/user/index?page=${
-                            currentPage < totalPages - 1
+                          href={`/user/index?page=${currentPage < totalPages - 1
                               ? currentPage + 1
                               : totalPages - 1
-                          }&size=6`}
+                            }&size=6`}
                         >
                           <AiOutlineDoubleRight />
                         </a>
@@ -389,8 +296,13 @@ const Index = ({
               </div>
             </div>
           </div>
-          <div className="col-1"></div>
+          <div className="col-1">
+
+          </div>
+
         </div>
+
+
       </div>
     </div>
   );
