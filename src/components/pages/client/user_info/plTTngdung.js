@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import {
+  // fetchBillsByAccountId,
+  fetchBillsByAccountId,
+} from "../../../../../src/services/Bill";
 
 // const GradientText = styled.h2`
 //   font-size: 72px;
@@ -133,6 +137,18 @@ const GlobalStyle = styled.div`
 `;
 
 const TTngdung = () => {
+  const [listBill, setListBill] = useState([]);
+
+  useEffect(() => {
+    fetchBillsByAccountId()
+      .then((Response) => {
+        setListBill(Response.data);
+        console.log(Response.date);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
   return (
     <GlobalStyle>
       <div className="main">
@@ -260,7 +276,7 @@ const TTngdung = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {bills.map((item, index) => (
+                        {listBill.map((item, index) => (
                           <tr className="align-middle" key={index}>
                             <td>{index + 1}</td>
                             <td scope="row" className="text-center">
@@ -304,8 +320,8 @@ const TTngdung = () => {
                               </a>
                             </td>
                           </tr>
-                        ))} */}
-                        <tr>
+                        ))}
+                        {/* <tr>
                           <td>1</td>
                           <td>
                             <img
@@ -321,7 +337,7 @@ const TTngdung = () => {
                               Chi tiết
                             </button>
                           </td>
-                        </tr>
+                        </tr> */}
                       </tbody>
                     </table>
                     {/* <nav className="tohop" aria-label="Page navigation example">

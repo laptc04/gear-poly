@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import { fetchBillById } from "../../../../services/Bill";
+import { fetchDetailBillById } from "../../../../services/DetaillBill";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -15,6 +19,7 @@ const InvoiceContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 900px;
   margin: 20px auto;
+  margin-top: 150px;
 `;
 
 // const PrimaryText = styled.h1`
@@ -60,7 +65,55 @@ const Table = styled.table`
 //   }
 // `;
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const Chitiethoadon = () => {
+  //load data lên table detailBill
+  const [listDetailBill, setListDetailBill] = useState([]);
+
+  useEffect(() => {
+    fetchDetailBillById(detailBillId)
+      .then((Response) => {
+        setListDetailBill(Response.data);
+        console.log(Response.date);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const { userId, detailBillId } = useParams();
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        console.log("Fetching bill with", userId, detailBillId);
+        const response = await fetchBillById(userId, detailBillId);
+        console.log("Fetched bill data:", response?.data);
+        setSelectedBill(response?.data);
+      } catch (err) {
+        // console.error("Error fetching bill:", err);
+        setError(err);
+      }
+    };
+
+    if (userId && detailBillId) {
+      fetchProductData();
+    }
+  }, [userId, detailBillId]);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
       {/* {message && (
@@ -75,11 +128,16 @@ const Chitiethoadon = () => {
       <div className="invoice-container">
         <InvoiceContainer>
           <h1 className="text-primary">HÓA ĐƠN</h1>
-          <p>Ngày lập: 20/07/2024</p>
+          <p>
+            Ngày lập:{" "}
+            <span>{selectedBill ? formatDate(selectedBill.billDate) : ""}</span>
+          </p>
           <hr />
-          <strong>Địa chỉ nhận hàng:</strong>
+          <strong>Tên người nhận: {}</strong>
+          <br></br>
+          <strong>Địa chỉ nhận hàng: </strong>
           <br />
-          <p>Cần Thơ</p>
+          <p>{selectedBill?.address}</p>
           <Table className="table table-bordered mt-4">
             <thead>
               <tr>
@@ -92,27 +150,27 @@ const Chitiethoadon = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {hoadon.map((item, index) => (
-              <tr key={index} className="align-middle">
-                <td>{index + 1}</td>
-                <td className="text-center">
-                  {item.productEntity.imageEntities.length > 0 && (
-                    <img
-                      src={`/images/${item.productEntity.imageEntities[0].name}`}
-                      className="rounded mx-auto d-inline-block align-middle main-image"
-                      width="50"
-                      height="50"
-                      alt=""
-                    />
-                  )}
-                </td>
-                <td>{item.productEntity.product_name}</td>
-                <td>{formatNumber(item.price)} VNĐ</td>
-                <td>{item.quantity}</td>
-                <td>{formatNumber(item.total_price)} VNĐ</td>
-              </tr>
-            ))} */}
-              <tr>
+              {/* {listDetailBill.map((item, index) => (
+                <tr key={index} className="align-middle">
+                  <td>{index + 1}</td>
+                  <td className="text-center">
+                    {item.productEntity.imageEntities.length > 0 && (
+                      <img
+                        src={`/images/${item.productEntity.imageEntities[0].name}`}
+                        className="rounded mx-auto d-inline-block align-middle main-image"
+                        width="50"
+                        height="50"
+                        alt=""
+                      />
+                    )}
+                  </td>
+                  <td>{item.productEntity.product_name}</td>
+                  <td>{formatNumber(item.price)} VNĐ</td>
+                  <td>{item.quantity}</td>
+                  <td>{formatNumber(item.total_price)} VNĐ</td>
+                </tr>
+              ))} */}
+              {/* <tr>
                 <td>1</td>
                 <td>
                   <img
@@ -125,7 +183,7 @@ const Chitiethoadon = () => {
                 <td>300.000 VNĐ</td>
                 <td>1</td>
                 <td>300.000 VNĐ</td>
-              </tr>
+              </tr> */}
             </tbody>
           </Table>
           <div className="total-row d-flex justify-content-between align-items-center">
