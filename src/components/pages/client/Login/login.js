@@ -1,16 +1,39 @@
-import React from "react";
-import { useState } from 'react';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { getProfile, loginApi } from "../../../../services/Auth";
 import './login.css';
+
 const Login = () => {
+  const { register, handleSubmit } = useForm();
+  const [cookie, setCookie] = useCookies();
+  const [errorMessage, setErrorMessage] = useState(""); // Thêm state để lưu thông báo lỗi
+  const navigate = useNavigate();
 
-  const [path, setPath] = useState('');
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const onSubmit = async (data) => {
+    try {
+      const res = await loginApi({
+        id: data.id,
+        password: data.password,
+      });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // handle form submission logic here
+      if (res && res.token) {
+        const date = new Date();
+        date.setHours(date.getHours() + 1);
+
+        setCookie("token", res.token, { path: "/", expires: date });
+
+        // Chuyển hướng đến trang index
+        navigate("/");
+      } else {
+        // Thiết lập thông báo lỗi nếu không có token
+        setErrorMessage("Username hoặc password không chính xác");
+      }
+    } catch (error) {
+      // Thiết lập thông báo lỗi nếu có lỗi khi gọi API
+      setErrorMessage("Lỗi khi đăng nhập: " + (error.response?.data?.message || "Có lỗi xảy ra"));
+    }
   };
 
   return (
@@ -22,38 +45,46 @@ const Login = () => {
               <h1 className="text-center pb-2 login-title">
                 <a href="/index">Đăng nhập</a>
               </h1>
-              <form onSubmit={handleSubmit}>
-                <input type="hidden" name="path" value={path} onChange={(e) => setPath(e.target.value)} />
+              {/* Hiển thị thông báo lỗi nếu có */}
+              {errorMessage && (
+                <div className="alert alert-danger" role="alert">
+                  {errorMessage}
+                </div>
+              )}
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1" className="form-label text-dark">Tên đăng nhập:</label>
-                  <input 
-                    name="id" 
-                    className="form-control" 
-                    id="exampleFormControlInput1" 
-                    placeholder="Tên đăng nhập" 
-                    required 
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
+                  <label htmlFor="id" className="form-label text-dark">ID:</label>
+                  <input
+                    id="id"
+                    name="id"
+                    type="text"
+                    className="form-control"
+                    placeholder="ID"
+                    required
+                    {...register("id")}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput2" className="form-label text-dark">Mật khẩu:</label>
-                  <input 
-                    name="password" 
-                    type="password" 
-                    className="form-control" 
-                    id="exampleFormControlInput2" 
-                    placeholder="Mật khẩu" 
-                    required 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                  <label htmlFor="password" className="form-label text-dark">Mật khẩu:</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    className="form-control"
+                    placeholder="Mật khẩu"
+                    required
+                    {...register("password")}
                   />
                 </div>
-                {message && (
-                  <div className="text-danger">
-                    <p>{message}</p>
-                  </div>
-                )}
+                <div className="form-check mb-3">
+                  <input
+                    id="remember"
+                    name="remember"
+                    className="form-check-input"
+                    type="checkbox"
+                  />
+                  <label className="form-check-label" htmlFor="remember">Nhớ tài khoản</label>
+                </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary mt-1">Đăng nhập</button>
                 </div>
@@ -68,4 +99,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
