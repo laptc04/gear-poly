@@ -46,7 +46,7 @@ function App() {
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="bills" element={<Laphoadon />} />
               <Route
-                path="billDetails/:userId/:detailBillId"
+                path="userInfo/:userId/:detailBillId"
                 element={<Chitiethoadon />}
               />
               <Route path="userInfo/:userId" element={<TTngdung />} />
