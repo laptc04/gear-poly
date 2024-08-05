@@ -189,8 +189,11 @@ const Index = ({
                       </center>
                       <div className="card-body">
                         <h6 className="card-title">{Listproducts.product_name}</h6>
-                        <p className="card-text">{Listproducts.description}</p>
-                        <p className="text-danger">{Listproducts.price} VNĐ</p>
+                        <p className="text-danger">
+                          {new Intl.NumberFormat('vi-VN', 
+                          { style: 'currency', currency: 'VND' }).
+                          format(Listproducts.price)}</p>
+
                         <p className="text-warning">0.0 <FaStar /></p>
                         <a href={`ProductDetail/${Listproducts.id}`} className="btn btn-primary">
                           Xem chi tiết

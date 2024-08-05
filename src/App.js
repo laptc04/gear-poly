@@ -36,13 +36,20 @@ function App() {
             <Route path="/user" element={<UserLayout />}>
               <Route path="home" element={<Index />} />
               <Route path="cart" element={<Cart />} />
-              <Route path="productDetail/:productID" component={ProductDetail} element={<ProductDetail />} />
+              <Route
+                path="productDetail/:productID"
+                component={ProductDetail}
+                element={<ProductDetail />}
+              />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="bills" element={<Laphoadon />} />
-              <Route path="billDetails" element={<Chitiethoadon />} />
-              <Route path="userInfo" element={<TTngdung />} />
+              <Route
+                path="userInfo/:userId/:detailBillId"
+                element={<Chitiethoadon />}
+              />
+              <Route path="userInfo/:userId" element={<TTngdung />} />
             </Route>
             {/* admin */}
             <Route path="/admin" element={<AdminLayout />}>
