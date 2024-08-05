@@ -39,7 +39,7 @@ const ProductDetail = () => {
     const account_id = 'A001';
     const newData = {
       account_id,
-      product_id: 1,
+      product_id: productDt.id,
       quantiy: 1,
       price: productDt?.price,
       image: productDt?.image
