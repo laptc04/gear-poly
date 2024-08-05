@@ -4,11 +4,10 @@ const loginApi = async ({ id, password }) => {
   try {
     const res = await request({
       method: "POST",
-      path: "api//auth/login",
+      path: "api/auth/login",
       data: {
         id,
         password,
-        // device: "website" // Uncomment if you need to include device information
       },
     });
 
@@ -27,7 +26,7 @@ const loginApi = async ({ id, password }) => {
     };
   } catch (error) {
     console.error("Lỗi khi gọi API đăng nhập:", error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -53,4 +52,3 @@ const getProfile = async () => {
 };
 
 export { loginApi, getProfile };
-
