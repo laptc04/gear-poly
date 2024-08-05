@@ -28,9 +28,8 @@ const request = async ({
 
     return res.data;
   } catch (error) {
-    console.log(error);
-    alert(error?.response?.data?.message || "Error");
-    return null;
+    console.log("API request error: ", error);
+    throw error.response?.data?.message || "Error";
   }
 };
 
