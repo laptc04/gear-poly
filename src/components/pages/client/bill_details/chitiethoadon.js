@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import {
+  fetchBillByaccId,
+  finDetaillBillbyBillId,
+} from "../../../../services/DetaillBill";
+import { useParams } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -15,6 +20,7 @@ const InvoiceContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 900px;
   margin: 20px auto;
+  margin-top: 150px;
 `;
 
 // const PrimaryText = styled.h1`
@@ -60,7 +66,59 @@ const Table = styled.table`
 //   }
 // `;
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const Chitiethoadon = () => {
+  //load data lên table detailBill
+  const { userId, detailBillId } = useParams();
+  const [selectedBill, setSelectedBill] = useState([]);
+  const [selectedBill1, setSelectedBill1] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        console.log("Fetching bill with", userId, detailBillId);
+        const response = await fetchBillByaccId(userId, detailBillId);
+        console.log("Fetched bill data:", response?.data);
+        setSelectedBill(response?.data);
+        console.log("bảng: " + selectedBill1);
+      } catch (err) {
+        // console.error("Error fetching bill:", err);
+        setError(err);
+      }
+    };
+
+    if (userId && detailBillId) {
+      fetchProductData();
+    }
+  }, [userId, detailBillId]);
+
+  useEffect(() => {
+    const fetchSelectedBill = async () => {
+      try {
+        const bills = await finDetaillBillbyBillId(detailBillId);
+        setSelectedBill1(bills?.data);
+      } catch (err) {
+        // console.error("Error fetching bill:", err);
+        setError(err);
+      }
+    };
+
+    fetchSelectedBill();
+  }, [detailBillId]);
+
+  const formatNumber = (num) => num?.toLocaleString("de-DE");
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
       {/* {message && (
@@ -75,11 +133,22 @@ const Chitiethoadon = () => {
       <div className="invoice-container">
         <InvoiceContainer>
           <h1 className="text-primary">HÓA ĐƠN</h1>
-          <p>Ngày lập: 20/07/2024</p>
+          <p>
+            Ngày lập:{" "}
+            <span>
+              {selectedBill ? formatDate(selectedBill?.billDate) : ""}
+            </span>
+          </p>
           <hr />
-          <strong>Địa chỉ nhận hàng:</strong>
+          <strong>Tên người nhận: {selectedBill?.account_id?.fullname}</strong>
+          <br></br>
+          <strong>Số điện thoại: {selectedBill?.account_id?.phone}</strong>
+          <br></br>
+          <strong>
+            Địa chỉ nhận hàng: {selectedBill?.account_id?.address}
+          </strong>
           <br />
-          <p>Cần Thơ</p>
+          <p>{selectedBill?.address}</p>
           <Table className="table table-bordered mt-4">
             <thead>
               <tr>
@@ -92,40 +161,37 @@ const Chitiethoadon = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {hoadon.map((item, index) => (
-              <tr key={index} className="align-middle">
-                <td>{index + 1}</td>
-                <td className="text-center">
-                  {item.productEntity.imageEntities.length > 0 && (
-                    <img
-                      src={`/images/${item.productEntity.imageEntities[0].name}`}
-                      className="rounded mx-auto d-inline-block align-middle main-image"
-                      width="50"
-                      height="50"
-                      alt=""
-                    />
-                  )}
-                </td>
-                <td>{item.productEntity.product_name}</td>
-                <td>{formatNumber(item.price)} VNĐ</td>
-                <td>{item.quantity}</td>
-                <td>{formatNumber(item.total_price)} VNĐ</td>
-              </tr>
-            ))} */}
-              <tr>
-                <td>1</td>
-                <td>
-                  <img
-                    src="image source"
-                    class="img-fluid rounded-top"
-                    alt=""
-                  />
-                </td>
-                <td>Màn hình</td>
-                <td>300.000 VNĐ</td>
-                <td>1</td>
-                <td>300.000 VNĐ</td>
-              </tr>
+              {Array.isArray(selectedBill1) && selectedBill1.length > 0 ? (
+                selectedBill1.map((item, index) => (
+                  <tr key={index} className="align-middle">
+                    <td>{index + 1}</td>
+                    <td className="text-center">
+                      {item.productEntity?.imageEntities?.length > 0 && (
+                        <img
+                          src={`/images/${item.productEntity.imageEntities[0].name}`}
+                          className="rounded mx-auto d-inline-block align-middle main-image"
+                          width="50"
+                          height="50"
+                          alt=""
+                        />
+                      )}
+                    </td>
+                    <td>{item.productEntity?.product_name}</td>
+                    <td>{formatNumber(item.productEntity?.price)} VNĐ</td>
+                    <td>{item.quantity}</td>
+                    <td>
+                      {formatNumber(item.productEntity?.price * item.quantity)}{" "}
+                      VNĐ
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
           <div className="total-row d-flex justify-content-between align-items-center">
@@ -179,7 +245,9 @@ const Chitiethoadon = () => {
             </nav>
           )} */}
             <div className="text-end total-amount">
-              <p className="text-danger">Tổng tiền: 300.000 VNĐ</p>
+              <p className="text-danger">
+                {formatNumber(selectedBill?.total)} VNĐ
+              </p>
             </div>
           </div>
           <hr />

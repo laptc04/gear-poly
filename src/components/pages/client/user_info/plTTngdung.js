@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { fetchBillByAccountId } from "../../../../services/Bill";
+import { useParams } from "react-router-dom";
 
 // const GradientText = styled.h2`
 //   font-size: 72px;
@@ -133,6 +135,64 @@ const GlobalStyle = styled.div`
 `;
 
 const TTngdung = () => {
+  const { userId } = useParams();
+  const [listBill, setListBill] = useState([]);
+
+  useEffect(() => {
+    const fetchBills = async () => {
+      try {
+        const response = await fetchBillByAccountId(userId);
+        console.log("Phản hồi từ API:", response.data); // Ghi log toàn bộ phản hồi từ API
+        console.log(userId);
+        setListBill(response.data);
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
+      }
+    };
+
+    fetchBills();
+  }, [userId]);
+
+  const renderTableRows = () => {
+    return listBill.map((item, index) => (
+      <tr className="align-middle" key={item.id || index}>
+        <td>{index + 1}</td>
+        <td scope="row" className="text-center">
+          <div className="text-nowrap">
+            <div className="image-container">
+              {item.billEntity?.slice(0, 3).map((image, idx) => (
+                <img
+                  key={idx}
+                  src={`/images/${image.ProductEntity?.imageEntities[0]?.name}`}
+                  className="rounded mx-auto ms-1 d-inline-block align-middle main-image"
+                  width="50px"
+                  height="50px"
+                  alt=""
+                />
+              ))}
+              {item.billEntity?.length > 3 && (
+                <small className="align-middle more-images">
+                  +{item.billEntity.length - 3}
+                </small>
+              )}
+            </div>
+          </div>
+        </td>
+        <td className="fw-bold">{item?.total.toLocaleString("de-DE")} VNĐ</td>
+        <td>{new Date(item?.billDate).toLocaleDateString("vi-VN")}</td>
+        <td className="text-center">
+          <a
+            href={`/user/userInfo/${userId}/${item?.id}`}
+            target="_parent"
+            className="btn btn-2"
+          >
+            Chi tiết
+          </a>
+        </td>
+      </tr>
+    ));
+  };
+
   return (
     <GlobalStyle>
       <div className="main">
@@ -148,7 +208,7 @@ const TTngdung = () => {
               <div>
                 <div className="row">
                   <div className="col"></div>
-                  <div className="col-9">
+                  <div className="col-4">
                     <form
                       id="uploadForm"
                       action="/update-user"
@@ -157,7 +217,7 @@ const TTngdung = () => {
                       // onSubmit={handleSubmit}
                     >
                       <div className="row position-relative">
-                        <h3 className="nd mt-1 text-center" id="h2">
+                        <h3 className="nd mt-1" id="h2">
                           Tài khoản
                         </h3>
                         <div className="col mt-3">
@@ -259,70 +319,7 @@ const TTngdung = () => {
                           <th className="text-center">Hành động</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {/* {bills.map((item, index) => (
-                          <tr className="align-middle" key={index}>
-                            <td>{index + 1}</td>
-                            <td scope="row" className="text-center">
-                              <div className="text-nowrap">
-                                <div className="image-container">
-                                  {item.billEntity
-                                    .slice(0, 3)
-                                    .map((image, idx) => (
-                                      <img
-                                        key={idx}
-                                        src={`/images/${image.ProductEntity?.imageEntities[0]?.name}`}
-                                        className="rounded mx-auto ms-1 d-inline-block align-middle main-image"
-                                        width="50px"
-                                        height="50px"
-                                        alt=""
-                                      />
-                                    ))}
-                                  {item.billEntity.length > 3 && (
-                                    <small className="align-middle more-images">
-                                      +{item.billEntity.length - 3}
-                                    </small>
-                                  )}
-                                </div>
-                              </div>
-                            </td>
-                            <td className="fw-bold">
-                              {item?.total.toLocaleString("de-DE")} VNĐ
-                            </td>
-                            <td>
-                              {new Date(item?.billDate).toLocaleDateString(
-                                "vi-VN"
-                              )}
-                            </td>
-                            <td className="text-center">
-                              <a
-                                href={`/chitiet?id=${item?.id}`}
-                                target="_parent"
-                                className="btn btn-2"
-                              >
-                                Chi tiết
-                              </a>
-                            </td>
-                          </tr>
-                        ))} */}
-                        <tr>
-                          <td>1</td>
-                          <td>
-                            <img
-                              src="image source"
-                              class="img-fluid rounded-top"
-                              alt=""
-                            />
-                          </td>
-                          <td>300.000 VNĐ</td>
-                          <td>20/07/2024</td>
-                          <td className="text-center">
-                            <button name="" id="" className="btn btn-primary">
-                              Chi tiết
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
+                      <tbody>{renderTableRows()}</tbody>
                     </table>
                     {/* <nav className="tohop" aria-label="Page navigation example">
                       <ul
