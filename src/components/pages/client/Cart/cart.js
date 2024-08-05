@@ -3,7 +3,6 @@ import Image1 from "../../../../images/sanpham1.webp";
 
 const Cart = ({ cartItems, total }) => {
   return (
-
     <div className="container mt-xxl-5">
       <hr />
       <hr />
