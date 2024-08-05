@@ -4,16 +4,27 @@ const loginApi = async ({ id, password }) => {
   try {
     const res = await request({
       method: "POST",
-      path: "/auth/login",
+      path: "api//auth/login",
       data: {
-        id: id,
-        password: password,
-        // device: "website"
+        id,
+        password,
+        // device: "website" // Uncomment if you need to include device information
       },
     });
 
     console.log("loginApi response:", res);
-    return res;
+    
+    if (!res || !res.account || !res.token) {
+      throw new Error('Phản hồi API không dự kiến');
+    }
+
+    const { account, token } = res;
+
+    return {
+      account,
+      token,
+      role: account.role, // Kiểm tra rằng role có trong account
+    };
   } catch (error) {
     console.error("Lỗi khi gọi API đăng nhập:", error);
     throw error;
@@ -21,13 +32,25 @@ const loginApi = async ({ id, password }) => {
 };
 
 const getProfile = async () => {
-  const res = await request({
-    method: "GET",
-    path: "/user",
-  });
+  try {
+    const res = await request({
+      method: "GET",
+      path: "api/auth/user",
+    });
 
-  return res;
+    if (!res || !res.account || res.account.role === undefined) {
+      throw new Error('Thông tin người dùng không tồn tại hoặc không hợp lệ');
+    }
+
+    return {
+      account: res.account,
+      role: res.account.role,
+    };
+  } catch (error) {
+    console.error("Lỗi khi gọi API lấy thông tin người dùng:", error);
+    throw error;
+  }
 };
 
-
 export { loginApi, getProfile };
+

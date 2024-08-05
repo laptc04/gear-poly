@@ -2,33 +2,40 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import { getProfile, loginApi } from "../../../../services/Auth";
+import { loginApi } from "../../../../services/Auth";
 import './login.css';
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
-  const [cookie, setCookie] = useCookies();
+  const [cookies, setCookie] = useCookies(["token"]);
   const [errorMessage, setErrorMessage] = useState(""); // Thêm state để lưu thông báo lỗi
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const res = await loginApi({
+      const { account, token, role } = await loginApi({
         id: data.id,
         password: data.password,
       });
 
-      if (res && res.token) {
+      if (token) {
         const date = new Date();
         date.setHours(date.getHours() + 1);
 
-        setCookie("token", res.token, { path: "/", expires: date });
+        setCookie("token", token, { path: "/", expires: date });
 
-        // Chuyển hướng đến trang index
-        navigate("/");
+        // Lưu vai trò người dùng vào cookie
+        const roleValue = role ? "true" : "false";
+        setCookie("role", roleValue, { path: "/", expires: date });
+
+        // Lưu ID người dùng vào localStorage
+        localStorage.setItem("userId", account.id);
+
+        // Chuyển hướng đến trang dựa trên vai trò
+        navigate(role ? "/admin" : "/");
       } else {
         // Thiết lập thông báo lỗi nếu không có token
-        setErrorMessage("Username hoặc password không chính xác");
+        setErrorMessage("ID hoặc mật khẩu không chính xác");
       }
     } catch (error) {
       // Thiết lập thông báo lỗi nếu có lỗi khi gọi API
@@ -90,7 +97,7 @@ const Login = () => {
                 </div>
               </form>
               <div className="mt-3 text-center">
-                <a href="/register" className="link-offset-3 link-underline link-underline-opacity-0">Tạo tài khoản mới ?</a>
+                <a href="/register" className="link-offset-3 link-underline link-underline-opacity-0">Tạo tài khoản mới?</a>
               </div>
             </div>
           </div>
