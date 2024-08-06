@@ -3,7 +3,7 @@ import GearPoly from "../../../images/LogoGearPoly.png";
 import { AiOutlineBell } from "react-icons/ai";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineSearch } from "react-icons/ai";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 const NavbarClient = () => {
   return (
     <div>
@@ -42,7 +42,7 @@ const NavbarClient = () => {
                 <CiShoppingCart />
               </i>
             </a>
-            <a href="/user/nguoidung">
+            <a href="/user/userInfo/A001">
               <img
                 id="profileImage"
                 src="/images/profile.png"
@@ -53,15 +53,19 @@ const NavbarClient = () => {
             </a>
           </div>
           <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic" style={{ height: "35px", width: "205px", marginTop: "5px" }}>
-        Tài khoản
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Đăng nhập</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Đăng ký</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              style={{ height: "35px", width: "205px", marginTop: "5px" }}
+            >
+              Tài khoản
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Đăng nhập</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Đăng ký</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </nav>
     </div>
