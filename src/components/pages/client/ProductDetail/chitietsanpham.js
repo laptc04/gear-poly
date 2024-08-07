@@ -3,25 +3,27 @@ import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import image1 from "../../../../images/sanpham1.webp";
 import { fetch } from '../../../../services/ProductDt';
+import { listCatId } from '../../../../services/ListIndex'; // Import your function
 import axios from "axios";
 import Swal from "sweetalert2";
 
 const ProductDetail = () => {
   const { productID } = useParams();
   const [productDt, setProductDt] = useState(null);
-  const [data, setData] = useState({ account_id: '', product_id: '', quantiy: 1, price: '', image: '' });
+  const [category, setCategory] = useState(null); // State for a single category
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        fetch(productID).then((response) => {
-          console.log(response?.data)
-          setProductDt(response?.data)
-        }).catch(error => {
-          console.error(error);
-        })
+        const productResponse = await fetch(productID);
+        const productData = productResponse?.data;
+        setProductDt(productData);
+
+        if (productData?.categories_id) {
+          const categoryResponse = await listCatId(productData.categories_id);
+          setCategory(categoryResponse?.data);
+        }
       } catch (error) {
-        console.log(productID)
         console.error("Error fetching product data:", error);
       }
     };
@@ -39,35 +41,36 @@ const ProductDetail = () => {
     const account_id = 'A001';
     const newData = {
       account_id,
-      product_id: 1,
+      product_id: productDt.id,
       quantiy: 1,
       price: productDt?.price,
       image: productDt?.image
     };
 
-    await axios.post('http://localhost:8080/api/cart/addCart', newData).then((response) => {
-      console.log(response.status);
-      
+    try {
+      const response = await axios.post('http://localhost:8080/api/cart/addCart', newData);
       if (response.status === 201) {
-        console.log("success");
-        
         Swal.fire({
           title: 'Added to cart',
           timer: 1500,
           icon: "success"
         });
       } else {
-        console.log("fail");
         Swal.fire({
           title: 'Can not add to cart',
           timer: 1500,
           icon: "error"
         });
       }
-    });
-}
-
-
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      Swal.fire({
+        title: 'Can not add to cart',
+        timer: 1500,
+        icon: "error"
+      });
+    }
+  };
 
   return (
     <div className="container">
@@ -82,19 +85,16 @@ const ProductDetail = () => {
               <h5>CHI TIẾT SẢN PHẨM</h5>
               <h2>{productDt.product_name}</h2>
               <div className="col-3">
-                <p>Danh mục</p>
+                <p>Danh mục:</p>
               </div>
               <div className="col-9">
-                <p>{productDt.category}</p>
-                <p>{productDt.manufacturer}</p>
-                <p>{productDt.supplier}</p>
+              <strong>{category?.categories_name || 'Loading category...'}</strong> {/* Display category name */}
               </div>
             </div>
             <h2 className="text-danger">
               <p className="text-danger">
-                {new Intl.NumberFormat('vi-VN',
-                  { style: 'currency', currency: 'VND' }).
-                  format(productDt.price)}</p>
+                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productDt.price)}
+              </p>
             </h2>
             <Button type="button" onClick={addToCart} className="btn btn-primary mt-5">
               Thêm vào giỏ hàng

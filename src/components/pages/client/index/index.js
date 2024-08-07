@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listIndex } from '../../../../services/ListIndex';
+import { listIndex,listCat2 } from '../../../../services/ListIndex';
 import image from "../../../../images/image.png";
 import image1 from "../../../../images/sanpham1.webp";
 
@@ -20,6 +20,8 @@ const Index = ({
 
 }) => {
   const [Listproducts, setProducts] = useState([])
+  const [listCat, setCats] = useState([])
+
 
   useEffect(() => {
     listIndex().then((Response) => {
@@ -28,6 +30,21 @@ const Index = ({
       console.error(error);
     })
   }, [])
+
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await listCat2();  // Await the promise returned by listCat
+        console.log(response?.data);  // Log the response data
+        setCats(response?.data);  // Set the data to state
+      } catch (error) {
+        console.error("Error fetching cat data:", error);  // Handle any errors
+      }
+    };
+  
+    fetchCategories();  // Call the async function
+  }, []);
 
   return (
     <div className="bg-body-tertiary">
@@ -162,7 +179,7 @@ const Index = ({
                   <option selected value="-1">
                     Tìm theo danh mục
                   </option>
-                  {categories.map((category) => (
+                  {listCat.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.categories_name}
                     </option>
@@ -190,10 +207,9 @@ const Index = ({
                       <div className="card-body">
                         <h6 className="card-title">{Listproducts.product_name}</h6>
                         <p className="text-danger">
-                          {new Intl.NumberFormat('vi-VN', 
-                          { style: 'currency', currency: 'VND' }).
-                          format(Listproducts.price)}</p>
-
+                          {new Intl.NumberFormat('vi-VN',
+                            { style: 'currency', currency: 'VND' }).
+                            format(Listproducts.price)}</p>
                         <p className="text-warning">0.0 <FaStar /></p>
                         <a href={`ProductDetail/${Listproducts.id}`} className="btn btn-primary">
                           Xem chi tiết
@@ -285,8 +301,8 @@ const Index = ({
                         <a
                           className="page-link"
                           href={`/user/index?page=${currentPage < totalPages - 1
-                              ? currentPage + 1
-                              : totalPages - 1
+                            ? currentPage + 1
+                            : totalPages - 1
                             }&size=6`}
                         >
                           <AiOutlineDoubleRight />
