@@ -1,44 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { carts, updateCartQuantity, removeCartItem } from '../../../../services/Cart';
+import axios from "axios";
 
 const Cart = ({ account_id }) => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
+
+  const fetchCartItems = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/cart/account/${id}`); 
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  };
   
   useEffect(() => {
-    const fetchCartItems = async () => {
-      const account_id2 = 'A001';
-      try {
-        const data = await carts(account_id2);
-        if (data && Array.isArray(data.items)) {
-          setCartItems(data.items);
-          setTotal(data.total);
-          setQuantities(data.items.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}));
+    const account_id2 = 'A001';
+    fetchCartItems(account_id2)
+      .then(data => {
+        if (data) {
+          setCartItems(data);
+          const initialQuantities = data.reduce((acc, item) => {
+            acc[item.id] = item.quantity;
+            return acc;
+          }, {});
+          setQuantities(initialQuantities);
         } else {
           console.error('Unexpected data format:', data);
         }
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching cart items:', error);
-      }
-    };
-
-    fetchCartItems();
+      });
   }, [account_id]);
 
-  const updateQuantity = (id, quantity) => {
-    setQuantities(prevQuantities => ({ ...prevQuantities, [id]: quantity }));
-    updateCartQuantity(id, quantity)
-      .then(response => console.log('Cart updated:', response))
-      .catch(error => console.error('Error updating cart:', error));
+  const updateQuantity = async (id, newQuantity) => {
+    try {
+      const response = await axios.put("http://localhost:8080/api/cart/update-quantity", {
+        id: id,
+        quantity: newQuantity,
+      });
+      if (response.status === 200) {
+        setCartItems(prevItems => 
+          prevItems.map(item =>
+            item.id === id ? { ...item, quantity: newQuantity } : item
+          )
+        );
+        setQuantities(prevQuantities => ({
+          ...prevQuantities,
+          [id]: newQuantity
+        }));
+        console.log("Quantity updated successfully");
+      } else {
+        console.error("Failed to update quantity");
+      }
+    } catch (error) {
+      console.error('Error updating quantity', error);
+    }
   };
 
   const removeFromCart = (id) => {
-    removeCartItem(id)
+    axios.delete(`http://localhost:8080/api/cart/delete-cart`, { params: { id } })
       .then(response => {
         console.log('Item removed:', response);
         setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-        // Optionally update total or quantities here if needed
       })
       .catch(error => console.error('Error removing item:', error));
   };
@@ -56,12 +83,12 @@ const Cart = ({ account_id }) => {
                   <img
                     height="60px"
                     width="60px"
-                    src={item.image || "../../../../images/sanpham1.webp"} // Use item.image if available
+                    src={`http://localhost:8080/images/abc.png`} // Use item.image if available
                     className="d-block"
-                    alt={item.name}
+                    alt={item.productEntity.product_name}
                   />
                   <div className="flex-grow-1">
-                    <h5 className="card-title mb-1">{item.product_id}</h5>
+                    <h5 className="card-title mb-1">{item.productEntity.product_name}</h5>
                   </div>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center">
@@ -83,12 +110,12 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-success btn-sm ms-1"
-                        onClick={() => updateQuantity(item.id, quantities[item.id] + 1)}
+                        onClick={() => updateQuantity(item.id, (quantities[item.id] || 1) + 1)}
                       >
                         +
                       </button>
                     </div>
-                    <p className="mb-0 mx-3">{item.price} VNĐ</p>
+                    <p className="mb-0 mx-3">{item.productEntity.price} VNĐ</p>
                     <button
                       type="button"
                       className="btn btn-danger"
