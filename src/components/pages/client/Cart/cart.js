@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import Image1 from "../../../../images/sanpham1.webp";
 import { carts, updateCartQuantity, removeCartItem } from '../../../../services/Cart';
 
-const Cart = ({account_id}) => {
+const Cart = ({ account_id }) => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
   
   useEffect(() => {
     const fetchCartItems = async () => {
+      const account_id2 = 'A001';
       try {
-        const data = await carts(account_id);
+        const data = await carts(account_id2);
         if (data && Array.isArray(data.items)) {
-          setCartItems(data.items); // Adjust according to your API response structure
-          setTotal(data.total); // Adjust according to your API response structure
+          setCartItems(data.items);
+          setTotal(data.total);
           setQuantities(data.items.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}));
         } else {
           console.error('Unexpected data format:', data);
@@ -46,7 +46,6 @@ const Cart = ({account_id}) => {
   return (
     <div className="container mt-xxl-5">
       <hr />
-      <hr />
       <form action="/cart" method="post">
         <div className="row">
           <h3>GIỎ HÀNG</h3>
@@ -57,7 +56,7 @@ const Cart = ({account_id}) => {
                   <img
                     height="60px"
                     width="60px"
-                    src={Image1}
+                    src={item.image || "../../../../images/sanpham1.webp"} // Use item.image if available
                     className="d-block"
                     alt={item.name}
                   />
@@ -91,6 +90,7 @@ const Cart = ({account_id}) => {
                     </div>
                     <p className="mb-0 mx-3">{item.price} VNĐ</p>
                     <button
+                      type="button"
                       className="btn btn-danger"
                       onClick={() => removeFromCart(item.id)}
                     >
@@ -106,7 +106,7 @@ const Cart = ({account_id}) => {
           )}
           <div className="d-flex justify-content-between">
             <h5 className="fw-bold">Tổng cộng:</h5>
-            <h5 className="text-danger fw-bold">{total}VNĐ</h5>
+            <h5 className="text-danger fw-bold">{total} VNĐ</h5>
           </div>
           <a href="/taohoadon" className="btn btn-danger w-100 mt-3">
             Đặt hàng
