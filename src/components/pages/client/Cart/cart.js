@@ -58,10 +58,10 @@ const Cart = ({ account_id }) => {
   const updateQuantity = async (id, newQuantity) => {
     try {
       const response = await axios.put("http://localhost:8080/api/cart/update-quantity", {
-        id: id,                 // Sử dụng ID của `CartEntity`
-        quantiy: newQuantity,  // Đảm bảo gửi đúng tên thuộc tính
+        id: id,                // Sử dụng ID của CartEntity
+        quantiy: newQuantity, // Sửa lỗi chính tả
       });
-      if (response.status === 201) {  // Kiểm tra trạng thái 200 (OK)
+      if (response.status === 200) { // Kiểm tra trạng thái 200 (OK)
         setCartItems(prevItems =>
           prevItems.map(item =>
             item.id === id ? { ...item, quantiy: newQuantity } : item
@@ -78,7 +78,8 @@ const Cart = ({ account_id }) => {
     } catch (error) {
       console.error('Error updating quantity', error);
     }
-};
+  };
+  
 
 
 const removeFromCart = (id) => {
