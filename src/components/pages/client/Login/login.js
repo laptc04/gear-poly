@@ -34,7 +34,7 @@ const Login = () => {
         // Chuyển hướng đến trang dựa trên vai trò
         navigate(role ? "/admin" : "/");
       } else {
-        setErrorMessage("ID hoặc mật khẩu không chính xác");
+        setErrorMessage("Tên đăng nhập hoặc mật khẩu không chính xác");
       }
     } catch (error) {
       setErrorMessage(error.message || "Có lỗi xảy ra");
