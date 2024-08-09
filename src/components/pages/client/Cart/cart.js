@@ -3,7 +3,6 @@ import Image1 from "../../../../images/sanpham1.webp";
 
 const Cart = ({ cartItems, total }) => {
   return (
-
     <div className="container mt-xxl-5">
       <hr />
       <hr />
@@ -27,7 +26,7 @@ const Cart = ({ cartItems, total }) => {
                   <button
                     type="button"
                     className="btn btn-danger btn-sm me-1"
-                  // onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                    // onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
                   >
                     -
                   </button>
@@ -42,7 +41,7 @@ const Cart = ({ cartItems, total }) => {
                   <button
                     type="button"
                     className="btn btn-success btn-sm ms-1"
-                  // onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                    // onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
                   >
                     +
                   </button>
@@ -50,7 +49,7 @@ const Cart = ({ cartItems, total }) => {
                 <p className="mb-0 mx-3">20.000.00VN</p>
                 <button
                   className="btn btn-danger"
-                // onClick={() => removeFromCart(item.id)}
+                  // onClick={() => removeFromCart(item.id)}
                 >
                   Xóa
                 </button>
@@ -62,7 +61,7 @@ const Cart = ({ cartItems, total }) => {
               <h5 className="text-danger fw-bold">20.000.00</h5>
             </div>
 
-            <a href="/taohoadon" className="btn btn-danger w-100 mt-3">
+            <a href="/user/bill" className="btn btn-danger w-100 mt-3">
               Đặt hàng
             </a>
           </div>

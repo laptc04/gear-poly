@@ -144,7 +144,7 @@ const TTngdung = () => {
         const response = await fetchBillByAccountId(userId);
         console.log("Phản hồi từ API:", response.data); // Ghi log toàn bộ phản hồi từ API
         console.log(userId);
-        setListBill(response.data);
+        setListBill(response.data.reverse());
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
       }
@@ -179,7 +179,13 @@ const TTngdung = () => {
           </div>
         </td>
         <td className="fw-bold">{item?.total.toLocaleString("de-DE")} VNĐ</td>
-        <td>{new Date(item?.billDate).toLocaleDateString("vi-VN")}</td>
+        <td>
+          {new Date(item?.billDate).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </td>
         <td className="text-center">
           <a
             href={`/user/userInfo/${userId}/${item?.id}`}
@@ -247,7 +253,7 @@ const TTngdung = () => {
                           <h3>Họ và tên</h3>
                           <StyledInput
                             className="rounded"
-                            value="{account?.fullname}"
+                            value={listBill}
                             type="text"
                             name="fullname"
                             placeholder="fullname"
