@@ -6,9 +6,9 @@ const Cart = ({ account_id }) => {
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
 
-  
 
-  
+
+
 
   const fetchCartItems = async (id) => {
     try {
@@ -20,7 +20,7 @@ const Cart = ({ account_id }) => {
     }
   };
 
-  
+
 
   useEffect(() => {
     const account_id2 = 'A001';
@@ -53,18 +53,18 @@ const Cart = ({ account_id }) => {
     calculateTotal();
   }, [cartItems]);
 
-  
-  
+
+
   const updateQuantity = async (id, newQuantity) => {
     try {
       const response = await axios.put("http://localhost:8080/api/cart/update-quantity", {
-        id: id,                 // Đảm bảo rằng `id` là ID của `CartEntity`
-        quantiy: newQuantity,   // Đảm bảo rằng bạn gửi đúng tên thuộc tính (nên là `quantity`)
+        id: id,                 // Sử dụng ID của `CartEntity`
+        quantiy: newQuantity,  // Đảm bảo gửi đúng tên thuộc tính
       });
-      if (response.status === 200) {
+      if (response.status === 201) {  // Kiểm tra trạng thái 200 (OK)
         setCartItems(prevItems =>
           prevItems.map(item =>
-            item.id === id ? { ...item, quantity: newQuantity } : item
+            item.id === id ? { ...item, quantiy: newQuantity } : item
           )
         );
         setQuantities(prevQuantities => ({
@@ -78,16 +78,20 @@ const Cart = ({ account_id }) => {
     } catch (error) {
       console.error('Error updating quantity', error);
     }
-  };
+};
 
-  const removeFromCart = (id) => {
-    axios.delete(`http://localhost:8080/api/cart/delete-cart`, { params: { id } })
-      .then(response => {
-        console.log('Item removed:', response);
-        setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-      })
-      .catch(error => console.error('Error removing item:', error));
-  };
+
+const removeFromCart = (id) => {
+  const account_id2 = 'A001';
+  const idCart = 246;  // Sử dụng id truyền vào thay vì hardcode
+  axios.delete(`http://localhost:8080/api/cart/delete-cart/${account_id2}/${idCart}`)
+    .then(response => {
+      console.log('Item removed:', response);
+      setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    })
+    .catch(error => console.error('Error removing item:', error));
+};
+
   return (
     <div className="container mt-xxl-5">
       <hr />
@@ -96,7 +100,7 @@ const Cart = ({ account_id }) => {
           <h3>GIỎ HÀNG</h3>
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
-              <div className="col-12" key={item.id}>
+              <div className="col-12" key={item.id}>  {/* Sử dụng item.id nếu đã là duy nhất */}
                 <div className="d-flex align-items-center mb-3">
                   <img
                     height="60px"
@@ -113,7 +117,7 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-danger btn-sm me-1"
-                        onClick={() => updateQuantity(item.id, Math.max(1, quantities[item.id] - 1))}
+                        onClick={() => updateQuantity(item.id, Math.max(1, quantities[item.quantiy] - 1))}
                       >
                         -
                       </button>
@@ -128,15 +132,15 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-success btn-sm ms-1"
-                        onClick={() => updateQuantity(item.id, (quantities[item.id] || 1) + 1)}
+                        onClick={() => updateQuantity(item.id, (quantities[item.quantiy] || 1) + 1)}
                       >
                         +
                       </button>
                     </div>
                     <p className="mb-0 mx-3">
-                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).
-                       format(item.productEntity.price)}</p>
-          
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.productEntity.price)}
+                    </p>
+
                     <button
                       type="button"
                       className="btn btn-danger"
@@ -152,10 +156,11 @@ const Cart = ({ account_id }) => {
           ) : (
             <p>Giỏ hàng của bạn hiện đang trống.</p>
           )}
+
           <div className="d-flex justify-content-between">
             <h5 className="fw-bold">Tổng cộng:</h5>
             <h5 className="text-danger fw-bold">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}</h5>
-           
+
           </div>
           <a href="/taohoadon" className="btn btn-danger w-100 mt-3">
             Đặt hàng
