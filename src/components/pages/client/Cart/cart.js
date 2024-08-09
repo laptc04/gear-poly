@@ -6,16 +6,22 @@ const Cart = ({ account_id }) => {
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
 
+  
+
+  
+
   const fetchCartItems = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/cart/account/${id}`); 
+      const response = await axios.get(`http://localhost:8080/api/cart/account/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
     }
   };
+
   
+
   useEffect(() => {
     const account_id2 = 'A001';
     fetchCartItems(account_id2)
@@ -36,14 +42,27 @@ const Cart = ({ account_id }) => {
       });
   }, [account_id]);
 
+  useEffect(() => {
+    const calculateTotal = () => {
+      const totalAmount = cartItems.reduce((acc, item) => {
+        return acc + item.quantity * item.productEntity.price;
+      }, 0);
+      setTotal(totalAmount);
+    };
+
+    calculateTotal();
+  }, [cartItems]);
+
+  
+  
   const updateQuantity = async (id, newQuantity) => {
     try {
       const response = await axios.put("http://localhost:8080/api/cart/update-quantity", {
-        id: id,
-        quantity: newQuantity,
+        id: id,                 // Đảm bảo rằng `id` là ID của `CartEntity`
+        quantiy: newQuantity,   // Đảm bảo rằng bạn gửi đúng tên thuộc tính (nên là `quantity`)
       });
       if (response.status === 200) {
-        setCartItems(prevItems => 
+        setCartItems(prevItems =>
           prevItems.map(item =>
             item.id === id ? { ...item, quantity: newQuantity } : item
           )
@@ -69,7 +88,6 @@ const Cart = ({ account_id }) => {
       })
       .catch(error => console.error('Error removing item:', error));
   };
-
   return (
     <div className="container mt-xxl-5">
       <hr />
@@ -102,7 +120,7 @@ const Cart = ({ account_id }) => {
                       <input
                         type="number"
                         className="form-control form-control-sm text-center"
-                        value={quantities[item.id] || 1}
+                        value={item.quantity}
                         min="1"
                         style={{ width: "50px" }}
                         readOnly
@@ -115,7 +133,10 @@ const Cart = ({ account_id }) => {
                         +
                       </button>
                     </div>
-                    <p className="mb-0 mx-3">{item.productEntity.price} VNĐ</p>
+                    <p className="mb-0 mx-3">
+                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).
+                       format(item.productEntity.price)}</p>
+          
                     <button
                       type="button"
                       className="btn btn-danger"
@@ -133,7 +154,8 @@ const Cart = ({ account_id }) => {
           )}
           <div className="d-flex justify-content-between">
             <h5 className="fw-bold">Tổng cộng:</h5>
-            <h5 className="text-danger fw-bold">{total} VNĐ</h5>
+            <h5 className="text-danger fw-bold">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}</h5>
+           
           </div>
           <a href="/taohoadon" className="btn btn-danger w-100 mt-3">
             Đặt hàng
