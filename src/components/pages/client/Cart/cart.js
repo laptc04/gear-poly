@@ -57,7 +57,7 @@ const Cart = ({ account_id }) => {
 
   const updateQuantity = async (id, newQuantity) => {
     try {
-      const response = await axios.put("http://localhost:8080/api/cart/update-quantity", {
+      const response = await axios.put('http://localhost:8080/api/cart/update-quantity/', {
         id: id,                // Sử dụng ID của CartEntity
         quantiy: newQuantity, // Sửa lỗi chính tả
       });
