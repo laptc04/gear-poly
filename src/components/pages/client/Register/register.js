@@ -13,24 +13,33 @@ const Register = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id,
+                    fullname,
+                    email,
+                    password,
+                }),
+            });
 
-        // try {
-        //     const response = await fetch('/register', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({ id, fullname, email, password })
-        //     });
-        //     const data = await response.json();
-        //     if (data.success) {
-        //         setMessage('Đăng ký thành công!');
-        //         history.push('/login');
-        //     } else {
-        //         setMessage(data.message || 'Đã xảy ra lỗi khi đăng ký.');
-        //     }
-        // } catch (error) {
-        //     console.error('Lỗi khi đăng ký:', error);
-        //     setMessage('Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.');
-        // }
+            if (response.ok) {
+                const data = await response.json();
+                // Hiển thị thông báo thành công hoặc chuyển hướng đến trang đăng nhập
+                setMessage('Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.');
+                // history.push('/login');
+            } else {
+                const error = await response.text();
+                setMessage(`Đăng ký thất bại: ${error}`);
+            }
+        } catch (error) {
+            setMessage(`Lỗi hệ thống: ${error.message}`);
+        }
     };
 
     return (
@@ -94,7 +103,7 @@ const Register = () => {
                                     />
                                 </div>
                                 {message && (
-                                    <div className="text-danger">
+                                    <div className={message.startsWith('Đăng ký thành công') ? 'success-message' : 'text-danger'}>
                                         <p>{message}</p>
                                     </div>
                                 )}

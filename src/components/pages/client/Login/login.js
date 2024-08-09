@@ -57,13 +57,13 @@ const Login = () => {
               )}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-3">
-                  <label htmlFor="id" className="form-label text-dark">ID:</label>
+                  <label htmlFor="id" className="form-label text-dark">Tên đăng nhập:</label>
                   <input
                     id="id"
                     name="id"
                     type="text"
                     className="form-control"
-                    placeholder="ID"
+                    placeholder="Tên đăng nhập"
                     required
                     {...register("id")}
                   />
