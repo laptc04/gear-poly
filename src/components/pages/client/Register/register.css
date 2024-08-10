@@ -23,3 +23,7 @@
 .form-label {
     font-weight: bold;
 }
+.success-message {
+    color: #28a745;
+    font-weight: bold;
+}

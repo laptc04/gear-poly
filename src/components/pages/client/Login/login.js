@@ -8,7 +8,7 @@ import './login.css';
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const [cookies, setCookie] = useCookies(["token"]);
-  const [errorMessage, setErrorMessage] = useState(""); // Thêm state để lưu thông báo lỗi
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -34,12 +34,10 @@ const Login = () => {
         // Chuyển hướng đến trang dựa trên vai trò
         navigate(role ? "/admin" : "/");
       } else {
-        // Thiết lập thông báo lỗi nếu không có token
-        setErrorMessage("ID hoặc mật khẩu không chính xác");
+        setErrorMessage("Tên đăng nhập hoặc mật khẩu không chính xác");
       }
     } catch (error) {
-      // Thiết lập thông báo lỗi nếu có lỗi khi gọi API
-      setErrorMessage("Lỗi khi đăng nhập: " + (error.response?.data?.message || "Có lỗi xảy ra"));
+      setErrorMessage(error.message || "Có lỗi xảy ra");
     }
   };
 
@@ -52,7 +50,6 @@ const Login = () => {
               <h1 className="text-center pb-2 login-title">
                 <a href="/index">Đăng nhập</a>
               </h1>
-              {/* Hiển thị thông báo lỗi nếu có */}
               {errorMessage && (
                 <div className="alert alert-danger" role="alert">
                   {errorMessage}
@@ -60,13 +57,13 @@ const Login = () => {
               )}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-3">
-                  <label htmlFor="id" className="form-label text-dark">ID:</label>
+                  <label htmlFor="id" className="form-label text-dark">Tên đăng nhập:</label>
                   <input
                     id="id"
                     name="id"
                     type="text"
                     className="form-control"
-                    placeholder="ID"
+                    placeholder="Tên đăng nhập"
                     required
                     {...register("id")}
                   />

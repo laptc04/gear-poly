@@ -44,7 +44,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="changePassword" element={<ChangePassword />} />
-              <Route path="bills" element={<Laphoadon />} />
+              <Route path="bill" element={<Laphoadon />} />
               <Route
                 path="userInfo/:userId/:detailBillId"
                 element={<Chitiethoadon />}
