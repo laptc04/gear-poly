@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../../../../services/Auth";
-import './login.css';
+import "./login.css";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
@@ -18,7 +18,7 @@ const Login = () => {
         password: data.password,
       });
 
-      console.log(account)
+      console.log(account);
       // console.log(data.id);
       // console.log(data.password);
       if (token) {
@@ -26,19 +26,27 @@ const Login = () => {
         date.setHours(date.getHours() + 1);
         // console.log(token)
         // setCookie("token", token, { path: "/", expires: date });
-        console.log(cookies)
+        console.log(cookies);
         // setCookie(account)
         // // Lưu vai trò người dùng vào cookie
         const roleValue = role ? "true" : "false";
         setCookie("role", roleValue, { path: "/", expires: date });
 
-        const encodedUserId = btoa(unescape(encodeURIComponent(account.id))); // Mã hóa Base64
+        const uniqueElement = Math.random();
+        const encodedUserId = btoa(
+          unescape(encodeURIComponent(`${account.id}_${uniqueElement}`))
+        );
+        setCookie("token", encodedUserId, {
+          HttpOnly: true,
+          Secure: true,
+          path: "/",
+          expires: new Date(Date.now() + 3600 * 1000),
+        });
+        sessionStorage.setItem("originalToken", encodedUserId);
         // const encodedUserIdrole = btoa(unescape(encodeURIComponent(data?.vaiTro)));
-        setCookie("token", encodedUserId, {  path: "/", expires: date });
-        console.log(data?.id)
+        console.log(data?.id);
         // setCookie("user", encodedUserId, { expires: date });
         // setCookie("role", encodedUserIdrole, { expires: date });
-     
 
         // Lưu ID người dùng vào localStorage
         localStorage.setItem("userId", account.id);
@@ -51,9 +59,9 @@ const Login = () => {
     } catch (error) {
       setErrorMessage(error.message || "Có lỗi xảy ra");
     }
-    console.log(cookies.user)
+    console.log(cookies.user);
   };
-  
+
   return (
     <div className="login-page">
       <div className="container">
@@ -70,7 +78,9 @@ const Login = () => {
               )}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-3">
-                  <label htmlFor="id" className="form-label text-dark">Tên đăng nhập:</label>
+                  <label htmlFor="id" className="form-label text-dark">
+                    Tên đăng nhập:
+                  </label>
                   <input
                     id="id"
                     name="id"
@@ -82,7 +92,9 @@ const Login = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label text-dark">Mật khẩu:</label>
+                  <label htmlFor="password" className="form-label text-dark">
+                    Mật khẩu:
+                  </label>
                   <input
                     id="password"
                     name="password"
@@ -100,14 +112,23 @@ const Login = () => {
                     className="form-check-input"
                     type="checkbox"
                   />
-                  <label className="form-check-label" htmlFor="remember">Nhớ tài khoản</label>
+                  <label className="form-check-label" htmlFor="remember">
+                    Nhớ tài khoản
+                  </label>
                 </div>
                 <div className="d-grid">
-                  <button type="submit" className="btn btn-primary mt-1">Đăng nhập</button>
+                  <button type="submit" className="btn btn-primary mt-1">
+                    Đăng nhập
+                  </button>
                 </div>
               </form>
               <div className="mt-3 text-center">
-                <a href="/register" className="link-offset-3 link-underline link-underline-opacity-0">Tạo tài khoản mới?</a>
+                <a
+                  href="/register"
+                  className="link-offset-3 link-underline link-underline-opacity-0"
+                >
+                  Tạo tài khoản mới?
+                </a>
               </div>
             </div>
           </div>

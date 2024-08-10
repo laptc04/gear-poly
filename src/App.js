@@ -46,7 +46,7 @@ function App() {
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="bill" element={<Laphoadon />} />
               <Route
-                path="userInfo/:userId/:detailBillId"
+                path="userInfo/:detailBillId"
                 element={<Chitiethoadon />}
               />
               <Route path="userinfo" element={<TTngdung />} />
@@ -54,8 +54,8 @@ function App() {
             {/* admin */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="home" element={<Qluser />} />
-              <Route path="product" element={<Product />} />
-              <Route path="category" element={<Categoties />} />
+              <Route path="products" element={<Product />} />
+              <Route path="categories" element={<Categoties />} />
               <Route path="statistics" element={<ThongKeTongChiTieu />} />
               <Route path="wherehouse" element={<Kho />} />
             </Route>

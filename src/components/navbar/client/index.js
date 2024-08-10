@@ -11,6 +11,7 @@ const NavbarClient = () => {
     deleteCookie("token");
     deleteCookie("role");
     localStorage.removeItem("userId");
+    sessionStorage.removeItem("originalToken");
     window.location.href = "/";
   };
   return (

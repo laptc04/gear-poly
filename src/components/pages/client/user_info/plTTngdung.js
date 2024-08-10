@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { fetchBillByAccountId, findAccountId } from "../../../../services/Bill";
 import Swal from "sweetalert2";
 import axios from "axios";
-
+import { useCookies } from "react-cookie";
+import Login from "../Login/login";
 // const GradientText = styled.h2`
 //   font-size: 72px;
 //   background: -webkit-linear-gradient(#dd93e0, #333);
@@ -136,8 +137,43 @@ const GlobalStyle = styled.div`
 `;
 
 const TTngdung = () => {
-  const userId = localStorage.getItem("userId");
+  // const userId = localStorage.getItem("userId");
+  const uniqueElement = Math.random();
   const [listBill, setListBill] = useState([]);
+  const [userId, setUserId] = React.useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
+
+  useEffect(() => {
+    const storedOriginalToken = sessionStorage.getItem("originalToken");
+
+    if (cookies.token && storedOriginalToken) {
+      try {
+        // Giải mã token hiện tại từ cookie
+        const decodedToken = decodeURIComponent(escape(atob(cookies.token)));
+        const extractedUserId = decodedToken.split("_")[0];
+
+        // Giải mã token gốc đã lưu
+        const originalDecodedToken = decodeURIComponent(
+          escape(atob(storedOriginalToken))
+        );
+        const originalUserId = originalDecodedToken.split("_")[0];
+
+        if (cookies.token !== storedOriginalToken) {
+          console.log("Token đã thay đổi, đặt lại token gốc.");
+          setCookie("token", storedOriginalToken, {
+            HttpOnly: true,
+            Secure: true,
+            path: "/",
+            expires: new Date(Date.now() + 3600 * 1000),
+          });
+        } else {
+          setUserId(originalUserId); // Đặt ID người dùng vào trạng thái
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra token:", error);
+      }
+    }
+  }, [cookies.token, setCookie]);
 
   useEffect(() => {
     const fetchBills = async () => {
@@ -320,7 +356,9 @@ const TTngdung = () => {
         </td>
         <td className="text-center">
           <a
-            href={`/user/userInfo/${userId}/${item?.id}`}
+            href={`/user/userInfo/${btoa(
+              unescape(encodeURIComponent(`${item.id}_${uniqueElement}`))
+            )}`}
             target="_parent"
             className="btn btn-2"
           >

@@ -8,19 +8,42 @@ const Cart = ({ account_id }) => {
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
 
-  const [userId, setUserId] = React.useState('');
-  const [cookies] = useCookies(["token"]);
-
+  const [userId, setUserId] = React.useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
 
   useEffect(() => {
-    if (cookies.token) {
-      // Giải mã user ID từ cookie
-      const decodedUserId = atob(cookies.token); // Giải mã Base64
-      setUserId(decodedUserId);
-    }
-  }, [cookies]);
+    const storedOriginalToken = sessionStorage.getItem("originalToken");
 
-  console.log(userId)
+    if (cookies.token && storedOriginalToken) {
+      try {
+        // Giải mã token hiện tại từ cookie
+        const decodedToken = decodeURIComponent(escape(atob(cookies.token)));
+        const extractedUserId = decodedToken.split("_")[0];
+
+        // Giải mã token gốc đã lưu
+        const originalDecodedToken = decodeURIComponent(
+          escape(atob(storedOriginalToken))
+        );
+        const originalUserId = originalDecodedToken.split("_")[0];
+
+        if (cookies.token !== storedOriginalToken) {
+          console.log("Token đã thay đổi, đặt lại token gốc.");
+          setCookie("token", storedOriginalToken, {
+            HttpOnly: true,
+            Secure: true,
+            path: "/",
+            expires: new Date(Date.now() + 3600 * 1000),
+          });
+        } else {
+          setUserId(originalUserId); // Đặt ID người dùng vào trạng thái
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra token:", error);
+      }
+    }
+  }, [cookies.token, setCookie]);
+
+  console.log(userId);
 
   const fetchCartItems = async (userId) => {
     try {
@@ -64,14 +87,10 @@ const Cart = ({ account_id }) => {
     calculateTotal();
   }, [cartItems]);
 
-  
-
   const removeFromCart = (id) => {
-    console.log(id)
+    console.log(id);
     axios
-      .delete(
-        `http://localhost:8080/api/cart/${id}`
-      )
+      .delete(`http://localhost:8080/api/cart/${id}`)
       .then((response) => {
         console.log("Item removed:", response);
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -79,87 +98,83 @@ const Cart = ({ account_id }) => {
       .catch((error) => console.error("Error removing item:", error));
   };
 
-
-const minus = async(maGH) => {
+  const minus = async (maGH) => {
     try {
       const response = await axios.get(
         `http://localhost:8080/api/cart/item/${maGH}`
       );
 
-      console.log(response?.data?.quantity)
-        var newQuantity = response?.data?.quantity;
+      console.log(response?.data?.quantity);
+      var newQuantity = response?.data?.quantity;
+      console.log(newQuantity);
+      if (newQuantity !== undefined && newQuantity > 1) {
+        newQuantity = newQuantity - 1;
+        // setCount(newQuantity)
         console.log(newQuantity);
-        if (newQuantity !== undefined && newQuantity > 1) {
-            newQuantity =newQuantity-1;
-            // setCount(newQuantity)
-            console.log(newQuantity);
-            var a = 10 ;
-            const giohang = { quantity: newQuantity };
-            console.log(giohang);
-      const response2 = await axios.put(
-              `http://localhost:8080/api/cart/${maGH}`,giohang
-      );
-      fetchCartItems(userId)
-      .then((data) => {
-        if (data) {
-          setCartItems(data);
-          const initialQuantities = data.reduce((acc, item) => {
-            acc[item.id] = item.quantity;
-            return acc;
-          }, {});
-          setQuantities(initialQuantities);
-        } else {
-          console.error("Unexpected data format:", data);
-        }
-      })
-        
-        } else {
-            console.error('Response or response data is not available');
-        }
+        var a = 10;
+        const giohang = { quantity: newQuantity };
+        console.log(giohang);
+        const response2 = await axios.put(
+          `http://localhost:8080/api/cart/${maGH}`,
+          giohang
+        );
+        fetchCartItems(userId).then((data) => {
+          if (data) {
+            setCartItems(data);
+            const initialQuantities = data.reduce((acc, item) => {
+              acc[item.id] = item.quantity;
+              return acc;
+            }, {});
+            setQuantities(initialQuantities);
+          } else {
+            console.error("Unexpected data format:", data);
+          }
+        });
+      } else {
+        console.error("Response or response data is not available");
+      }
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-    
-};
+  };
 
-const plus =async (maGH) => {           
-        try {
-          const response = await axios.get(
-            `http://localhost:8080/api/cart/item/${maGH}`
-          );
-            var newQuantity = response?.data?.quantity;
-            console.log(newQuantity);
-            if (newQuantity !== undefined ) {
-                newQuantity =newQuantity+1;
-                // setCount(newQuantity)
-                console.log(newQuantity);
-                var a = 10 ;
-                const giohang = { quantity: newQuantity };
-                console.log(giohang);
-                const response2 = await axios.put(
-                  `http://localhost:8080/api/cart/${maGH}`,giohang
-          );
-          fetchCartItems(userId)
-          .then((data) => {
-            if (data) {
-              setCartItems(data);
-              const initialQuantities = data.reduce((acc, item) => {
-                acc[item.id] = item.quantity;
-                return acc;
-              }, {});
-              setQuantities(initialQuantities);
-            } else {
-              console.error("Unexpected data format:", data);
-            }
-          })
-               
-            } else {
-                console.error('Response or response data is not available');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-}
+  const plus = async (maGH) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/cart/item/${maGH}`
+      );
+      var newQuantity = response?.data?.quantity;
+      console.log(newQuantity);
+      if (newQuantity !== undefined) {
+        newQuantity = newQuantity + 1;
+        // setCount(newQuantity)
+        console.log(newQuantity);
+        var a = 10;
+        const giohang = { quantity: newQuantity };
+        console.log(giohang);
+        const response2 = await axios.put(
+          `http://localhost:8080/api/cart/${maGH}`,
+          giohang
+        );
+        fetchCartItems(userId).then((data) => {
+          if (data) {
+            setCartItems(data);
+            const initialQuantities = data.reduce((acc, item) => {
+              acc[item.id] = item.quantity;
+              return acc;
+            }, {});
+            setQuantities(initialQuantities);
+          } else {
+            console.error("Unexpected data format:", data);
+          }
+        });
+      } else {
+        console.error("Response or response data is not available");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container mt-xxl-5">
@@ -167,7 +182,6 @@ const plus =async (maGH) => {
       <hr />
       <hr />
       <form action="/cart" method="post">
-
         <div className="row">
           <h3>GIỎ HÀNG</h3>
           {cartItems.length > 0 ? (
@@ -233,7 +247,9 @@ const plus =async (maGH) => {
               </div>
             ))
           ) : (
-           <center><p>Giỏ hàng của bạn hiện đang trống.</p></center>
+            <center>
+              <p>Giỏ hàng của bạn hiện đang trống.</p>
+            </center>
           )}
 
           <div className="d-flex justify-content-between">

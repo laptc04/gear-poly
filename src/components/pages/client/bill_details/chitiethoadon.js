@@ -5,7 +5,7 @@ import {
   finDetaillBillbyBillId,
 } from "../../../../services/DetaillBill";
 import { useParams } from "react-router-dom";
-
+import { useCookies } from "react-cookie";
 const GlobalStyle = createGlobalStyle`
   body {
     background-color: #f5f5f5;
@@ -76,35 +76,83 @@ const formatDate = (dateString) => {
 
 const Chitiethoadon = () => {
   //load data lên table detailBill
-  const { userId, detailBillId } = useParams();
+  const { detailBillId } = useParams();
   const [selectedBill, setSelectedBill] = useState([]);
   const [selectedBill1, setSelectedBill1] = useState([]);
   const [error, setError] = useState(null);
 
+  const [userId, setUserId] = React.useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
+
+  useEffect(() => {
+    const storedOriginalToken = sessionStorage.getItem("originalToken");
+
+    if (cookies.token && storedOriginalToken) {
+      try {
+        // Giải mã token hiện tại từ cookie
+        const decodedToken = decodeURIComponent(escape(atob(cookies.token)));
+        const extractedUserId = decodedToken.split("_")[0];
+
+        // Giải mã token gốc đã lưu
+        const originalDecodedToken = decodeURIComponent(
+          escape(atob(storedOriginalToken))
+        );
+        const originalUserId = originalDecodedToken.split("_")[0];
+
+        if (cookies.token !== storedOriginalToken) {
+          console.log("Token đã thay đổi, đặt lại token gốc.");
+          setCookie("token", storedOriginalToken, {
+            HttpOnly: true,
+            Secure: true,
+            path: "/",
+            expires: new Date(Date.now() + 3600 * 1000),
+          });
+        } else {
+          setUserId(originalUserId); // Đặt ID người dùng vào trạng thái
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra token:", error);
+      }
+    }
+  }, [cookies.token, setCookie]);
+
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        console.log("Fetching bill with", userId, detailBillId);
-        const response = await fetchBillByaccId(userId, detailBillId);
+        console.log(
+          "Fetching bill with",
+          userId,
+          decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
+        );
+        const response = await fetchBillByaccId(
+          userId,
+          decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
+        );
         console.log("Fetched bill data:", response?.data);
         setSelectedBill(response?.data);
-        console.log("bảng: " + selectedBill1);
+        console.log("bảng: " + selectedBill);
       } catch (err) {
         // console.error("Error fetching bill:", err);
         setError(err);
       }
     };
 
-    if (userId && detailBillId) {
+    if (
+      userId &&
+      decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
+    ) {
       fetchProductData();
     }
-  }, [userId, detailBillId]);
+  }, [userId, decodeURIComponent(escape(atob(detailBillId)).split("_")[0])]);
 
   useEffect(() => {
     const fetchSelectedBill = async () => {
       try {
-        const bills = await finDetaillBillbyBillId(detailBillId);
+        const bills = await finDetaillBillbyBillId(
+          decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
+        );
         setSelectedBill1(bills?.data);
+        console.log(selectedBill1);
       } catch (err) {
         // console.error("Error fetching bill:", err);
         setError(err);
@@ -112,7 +160,7 @@ const Chitiethoadon = () => {
     };
 
     fetchSelectedBill();
-  }, [detailBillId]);
+  }, [decodeURIComponent(escape(atob(detailBillId)).split("_")[0])]);
 
   const formatNumber = (num) => num?.toLocaleString("de-DE");
   if (error) {
