@@ -17,6 +17,7 @@ const ProductDetail = () => {
   const [userId, setUserId] = React.useState('');
   const [cookies] = useCookies(["token"]);
 
+  const [soluong, setSoluong] = useState(1);
 
   useEffect(() => {
     if (cookies.token) {
@@ -51,19 +52,19 @@ const ProductDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const addToCart = async () => {
+  const addToCart = async (id,gia) => {
     console.log('adding to cart');
     const account_id = userId;
     const newData = {
-      account_id,
-      product_id: productDt.id,
-      quantiy: 1,
-      price: productDt?.price,
-      image: productDt?.image
+      accountEntity: {id: account_id},
+      productEntity:{id: id},
+      quantity: soluong,
+      price: gia
     };
-
+    console.log(newData)
     try {
-      const response = await axios.post('http://localhost:8080/api/cart/addCart', newData);
+      const response = await axios.post('http://localhost:8080/api/cart', newData);
+      console.log(response)
       if (response.status === 201) {
         Swal.fire({
           title: 'Added to cart',
@@ -111,7 +112,7 @@ const ProductDetail = () => {
                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productDt.price)}
               </p>
             </h2>
-            <Button type="button" onClick={addToCart} className="btn btn-primary mt-5">
+            <Button type="button" onClick={() => addToCart(productDt.id,productDt.price)} className="btn btn-primary mt-5">
               Thêm vào giỏ hàng
             </Button>
           </div>

@@ -25,7 +25,7 @@ const Cart = ({ account_id }) => {
   const fetchCartItems = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/cart/account/${userId}`
+        `http://localhost:8080/api/cart/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -64,40 +64,13 @@ const Cart = ({ account_id }) => {
     calculateTotal();
   }, [cartItems]);
 
-  const updateQuantity = async (id, newQuantity) => {
-    try {
-      const response = await axios.put(
-        "http://localhost:8080/api/cart/update-quantity/",
-        {
-          id: id, // Sử dụng ID của CartEntity
-          quantiy: newQuantity, // Sửa lỗi chính tả
-        }
-      );
-      if (response.status === 200) {
-        // Kiểm tra trạng thái 200 (OK)
-        setCartItems((prevItems) =>
-          prevItems.map((item) =>
-            item.id === id ? { ...item, quantiy: newQuantity } : item
-          )
-        );
-        setQuantities((prevQuantities) => ({
-          ...prevQuantities,
-          [id]: newQuantity,
-        }));
-        console.log("Quantity updated successfully");
-      } else {
-        console.error("Failed to update quantity");
-      }
-    } catch (error) {
-      console.error("Error updating quantity", error);
-    }
-  };
+  
 
   const removeFromCart = (id) => {
     console.log(id)
     axios
       .delete(
-        `http://localhost:8080/api/cart/delete-cart/${id}`
+        `http://localhost:8080/api/cart/${id}`
       )
       .then((response) => {
         console.log("Item removed:", response);
@@ -106,10 +79,95 @@ const Cart = ({ account_id }) => {
       .catch((error) => console.error("Error removing item:", error));
   };
 
+
+const minus = async(maGH) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/cart/item/${maGH}`
+      );
+
+      console.log(response?.data?.quantity)
+        var newQuantity = response?.data?.quantity;
+        console.log(newQuantity);
+        if (newQuantity !== undefined && newQuantity > 1) {
+            newQuantity =newQuantity-1;
+            // setCount(newQuantity)
+            console.log(newQuantity);
+            var a = 10 ;
+            const giohang = { quantity: newQuantity };
+            console.log(giohang);
+      const response2 = await axios.put(
+              `http://localhost:8080/api/cart/${maGH}`,giohang
+      );
+      fetchCartItems(userId)
+      .then((data) => {
+        if (data) {
+          setCartItems(data);
+          const initialQuantities = data.reduce((acc, item) => {
+            acc[item.id] = item.quantity;
+            return acc;
+          }, {});
+          setQuantities(initialQuantities);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
+      })
+        
+        } else {
+            console.error('Response or response data is not available');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    
+};
+
+const plus =async (maGH) => {           
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/api/cart/item/${maGH}`
+          );
+            var newQuantity = response?.data?.quantity;
+            console.log(newQuantity);
+            if (newQuantity !== undefined ) {
+                newQuantity =newQuantity+1;
+                // setCount(newQuantity)
+                console.log(newQuantity);
+                var a = 10 ;
+                const giohang = { quantity: newQuantity };
+                console.log(giohang);
+                const response2 = await axios.put(
+                  `http://localhost:8080/api/cart/${maGH}`,giohang
+          );
+          fetchCartItems(userId)
+          .then((data) => {
+            if (data) {
+              setCartItems(data);
+              const initialQuantities = data.reduce((acc, item) => {
+                acc[item.id] = item.quantity;
+                return acc;
+              }, {});
+              setQuantities(initialQuantities);
+            } else {
+              console.error("Unexpected data format:", data);
+            }
+          })
+               
+            } else {
+                console.error('Response or response data is not available');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+}
+
   return (
     <div className="container mt-xxl-5">
       <hr />
+      <hr />
+      <hr />
       <form action="/cart" method="post">
+
         <div className="row">
           <h3>GIỎ HÀNG</h3>
           {cartItems.length > 0 ? (
@@ -121,13 +179,13 @@ const Cart = ({ account_id }) => {
                   <img
                     height="60px"
                     width="60px"
-                    src={`http://localhost:8080/images/${item.product_id}`} // Use item.image if available
+                    src={`../../../../images/${item.productEntity.imageEntities[0].name}`} // Use item.image if available
                     className="d-block"
                     alt={item.product_id}
                   />
                   <div className="flex-grow-1">
                     <h5 className="card-title mb-1">
-                      {item.product_name}
+                      {item.productEntity.product_name}
                     </h5>
                   </div>
                   <div className="d-flex align-items-center justify-content-between">
@@ -135,12 +193,7 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-danger btn-sm me-1"
-                        onClick={() =>
-                          updateQuantity(
-                            item.id,
-                            Math.max(1, quantities[item.quantiy] - 1)
-                          )
-                        }
+                        onClick={() => minus(item.id)}
                       >
                         -
                       </button>
@@ -155,12 +208,7 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-success btn-sm ms-1"
-                        onClick={() =>
-                          updateQuantity(
-                            item.id,
-                            (quantities[item.quantiy] || 1) + 1
-                          )
-                        }
+                        onClick={() => plus(item.id)}
                       >
                         +
                       </button>
