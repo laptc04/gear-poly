@@ -160,7 +160,7 @@ const Register = () => {
                                 </div>
                             </form>
                             <div className="mt-3 text-center">
-                                <a href="/login" className="link-offset-3 link-underline link-underline-opacity-0">Đã có tài khoản? Đăng nhập</a>
+                                <a href="user/login" className="link-offset-3 link-underline link-underline-opacity-0">Đã có tài khoản? Đăng nhập</a>
                             </div>
                         </div>
                     </div>

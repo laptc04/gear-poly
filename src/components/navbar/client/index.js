@@ -4,7 +4,16 @@ import { AiOutlineBell } from "react-icons/ai";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineSearch } from "react-icons/ai";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { deleteCookie, getCookie } from "../../../services/Cookie/cookie";
+
+
 const NavbarClient = () => {
+  const handleLogout = () => {
+    deleteCookie("token");
+    deleteCookie("role");
+    localStorage.removeItem("userId");
+    window.location.href = "/";
+  };
   return (
     <div>
       <nav className="navbar fixed-top p-0">
@@ -57,9 +66,9 @@ const NavbarClient = () => {
         Tài khoản
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Đăng nhập</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Đăng ký</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+        <Dropdown.Item href="/user/login">Đăng nhập</Dropdown.Item>
+        <Dropdown.Item href="/user/register">Đăng ký</Dropdown.Item>
+        <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
         </div>
