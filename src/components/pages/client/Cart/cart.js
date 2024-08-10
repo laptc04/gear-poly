@@ -8,21 +8,20 @@ const Cart = ({ account_id }) => {
 
   const fetchCartItems = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/cart/account/${id}`);
-      console.log(response.data);
+      const response = await axios.get(
+        `http://localhost:8080/api/cart/account/${id}`
+      );
       return response.data;
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       throw error;
     }
   };
 
-
-
   useEffect(() => {
-    const account_id2 = 'A001';
+    const account_id2 = "A001";
     fetchCartItems(account_id2)
-      .then(data => {
+      .then((data) => {
         if (data) {
           setCartItems(data);
           const initialQuantities = data.reduce((acc, item) => {
@@ -31,11 +30,11 @@ const Cart = ({ account_id }) => {
           }, {});
           setQuantities(initialQuantities);
         } else {
-          console.error('Unexpected data format:', data);
+          console.error("Unexpected data format:", data);
         }
       })
-      .catch(error => {
-        console.error('Error fetching cart items:', error);
+      .catch((error) => {
+        console.error("Error fetching cart items:", error);
       });
   }, [account_id]);
 
@@ -50,46 +49,47 @@ const Cart = ({ account_id }) => {
     calculateTotal();
   }, [cartItems]);
 
-
-
   const updateQuantity = async (id, newQuantity) => {
     try {
-      const response = await axios.put('http://localhost:8080/api/cart/update-quantity', {
-        id: id,                // Sử dụng ID của CartEntity
-        quantiy: newQuantity, // Sửa lỗi chính tả
-      });
-      if (response.status === 200) { // Kiểm tra trạng thái 200 (OK)
-        setCartItems(prevItems =>
-          prevItems.map(item =>
+      const response = await axios.put(
+        "http://localhost:8080/api/cart/update-quantity/",
+        {
+          id: id, // Sử dụng ID của CartEntity
+          quantiy: newQuantity, // Sửa lỗi chính tả
+        }
+      );
+      if (response.status === 200) {
+        // Kiểm tra trạng thái 200 (OK)
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
             item.id === id ? { ...item, quantiy: newQuantity } : item
           )
         );
-        setQuantities(prevQuantities => ({
+        setQuantities((prevQuantities) => ({
           ...prevQuantities,
-          [id]: newQuantity
+          [id]: newQuantity,
         }));
         console.log("Quantity updated successfully");
       } else {
         console.error("Failed to update quantity");
       }
     } catch (error) {
-      console.error('Error updating quantity', error);
+      console.error("Error updating quantity", error);
     }
   };
-  
-
 
   const removeFromCart = (id) => {
-    axios.delete(`http://localhost:8080/api/cart/delete-cart/${id}`)
-      .then(response => {
-        if (response.status === 200) {
-          console.log('Item removed:', response);
-          setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-        } else {
-          console.error('Failed to remove item:', response);
-        }
+    const account_id2 = "A001";
+    const idCart = 246; // Sử dụng id truyền vào thay vì hardcode
+    axios
+      .delete(
+        `http://localhost:8080/api/cart/delete-cart/${account_id2}/${idCart}`
+      )
+      .then((response) => {
+        console.log("Item removed:", response);
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
       })
-      .catch(error => console.error('Error removing item:', error));
+      .catch((error) => console.error("Error removing item:", error));
   };
 
   return (
@@ -99,8 +99,10 @@ const Cart = ({ account_id }) => {
         <div className="row">
           <h3>GIỎ HÀNG</h3>
           {cartItems.length > 0 ? (
-            cartItems.map((item,index) => (
-              <div className="col-12" key={`${item.productEntity.product_name}-${index}`}>  {/* Sử dụng item.id nếu đã là duy nhất */}
+            cartItems.map((item) => (
+              <div className="col-12" key={item.id}>
+                {" "}
+                {/* Sử dụng item.id nếu đã là duy nhất */}
                 <div className="d-flex align-items-center mb-3">
                   <img
                     height="60px"
@@ -110,14 +112,21 @@ const Cart = ({ account_id }) => {
                     alt={item.productEntity.product_name}
                   />
                   <div className="flex-grow-1">
-                    <h5 className="card-title mb-1">{item.productEntity.product_name}</h5>
+                    <h5 className="card-title mb-1">
+                      {item.productEntity.product_name}
+                    </h5>
                   </div>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center">
                       <button
                         type="button"
                         className="btn btn-danger btn-sm me-1"
-                        onClick={() => updateQuantity(item.id, Math.max(1, quantities[item.quantiy] - 1))}
+                        onClick={() =>
+                          updateQuantity(
+                            item.id,
+                            Math.max(1, quantities[item.quantiy] - 1)
+                          )
+                        }
                       >
                         -
                       </button>
@@ -132,13 +141,21 @@ const Cart = ({ account_id }) => {
                       <button
                         type="button"
                         className="btn btn-success btn-sm ms-1"
-                        onClick={() => updateQuantity(item.id, (quantities[item.quantiy] || 1) + 1)}
+                        onClick={() =>
+                          updateQuantity(
+                            item.id,
+                            (quantities[item.quantiy] || 1) + 1
+                          )
+                        }
                       >
                         +
                       </button>
                     </div>
                     <p className="mb-0 mx-3">
-                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.productEntity.price)}
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(item.productEntity.price)}
                     </p>
 
                     <button
@@ -159,10 +176,14 @@ const Cart = ({ account_id }) => {
 
           <div className="d-flex justify-content-between">
             <h5 className="fw-bold">Tổng cộng:</h5>
-            <h5 className="text-danger fw-bold">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}</h5>
-
+            <h5 className="text-danger fw-bold">
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(total)}
+            </h5>
           </div>
-          <a href="/taohoadon" className="btn btn-danger w-100 mt-3">
+          <a href="/user/bill" className="btn btn-danger w-100 mt-3">
             Đặt hàng
           </a>
         </div>
