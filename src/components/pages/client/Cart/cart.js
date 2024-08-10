@@ -6,13 +6,10 @@ const Cart = ({ account_id }) => {
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
 
-
-
-
-
   const fetchCartItems = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8080/api/cart/account/${id}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -57,7 +54,7 @@ const Cart = ({ account_id }) => {
 
   const updateQuantity = async (id, newQuantity) => {
     try {
-      const response = await axios.put('http://localhost:8080/api/cart/update-quantity/', {
+      const response = await axios.put('http://localhost:8080/api/cart/update-quantity', {
         id: id,                // Sử dụng ID của CartEntity
         quantiy: newQuantity, // Sửa lỗi chính tả
       });
@@ -82,16 +79,18 @@ const Cart = ({ account_id }) => {
   
 
 
-const removeFromCart = (id) => {
-  const account_id2 = 'A001';
-  const idCart = 246;  // Sử dụng id truyền vào thay vì hardcode
-  axios.delete(`http://localhost:8080/api/cart/delete-cart/${account_id2}/${idCart}`)
-    .then(response => {
-      console.log('Item removed:', response);
-      setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-    })
-    .catch(error => console.error('Error removing item:', error));
-};
+  const removeFromCart = (id) => {
+    axios.delete(`http://localhost:8080/api/cart/delete-cart/${id}`)
+      .then(response => {
+        if (response.status === 200) {
+          console.log('Item removed:', response);
+          setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+        } else {
+          console.error('Failed to remove item:', response);
+        }
+      })
+      .catch(error => console.error('Error removing item:', error));
+  };
 
   return (
     <div className="container mt-xxl-5">
@@ -100,8 +99,8 @@ const removeFromCart = (id) => {
         <div className="row">
           <h3>GIỎ HÀNG</h3>
           {cartItems.length > 0 ? (
-            cartItems.map((item) => (
-              <div className="col-12" key={item.id}>  {/* Sử dụng item.id nếu đã là duy nhất */}
+            cartItems.map((item,index) => (
+              <div className="col-12" key={`${item.productEntity.product_name}-${index}`}>  {/* Sử dụng item.id nếu đã là duy nhất */}
                 <div className="d-flex align-items-center mb-3">
                   <img
                     height="60px"
