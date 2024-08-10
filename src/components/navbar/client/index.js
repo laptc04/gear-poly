@@ -3,12 +3,17 @@ import GearPoly from "../../../images/LogoGearPoly.png";
 import { AiOutlineBell } from "react-icons/ai";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineSearch } from "react-icons/ai";
-import Dropdown from "react-bootstrap/Dropdown";
+import Dropdown from 'react-bootstrap/Dropdown';
+import { deleteCookie, getCookie } from "../../../services/Cookie/cookie";
+
+
 const NavbarClient = () => {
-  const id = localStorage.getItem("userId");
-  if (!id) {
-    return null;
-  }
+  const handleLogout = () => {
+    deleteCookie("token");
+    deleteCookie("role");
+    localStorage.removeItem("userId");
+    window.location.href = "/";
+  };
   return (
     <div>
       <nav className="navbar fixed-top p-0">
@@ -46,7 +51,7 @@ const NavbarClient = () => {
                 <CiShoppingCart />
               </i>
             </a>
-            <a href={`/user/userInfo/${id}`}>
+            <a href="/user/nguoidung">
               <img
                 id="profileImage"
                 src="/images/profile.png"
@@ -57,19 +62,15 @@ const NavbarClient = () => {
             </a>
           </div>
           <Dropdown>
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              style={{ height: "35px", width: "205px", marginTop: "5px" }}
-            >
-              Tài khoản
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Đăng nhập</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Đăng ký</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+      <Dropdown.Toggle variant="success" id="dropdown-basic" style={{ height: "35px", width: "205px", marginTop: "5px" }}>
+        Tài khoản
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item href="/user/login">Đăng nhập</Dropdown.Item>
+        <Dropdown.Item href="/user/register">Đăng ký</Dropdown.Item>
+        <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
         </div>
       </nav>
     </div>
