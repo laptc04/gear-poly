@@ -140,22 +140,19 @@ const Chitiethoadon = () => {
             </span>
           </p>
           <hr />
-          <strong>Tên người nhận: {selectedBill?.account_id?.fullname}</strong>
+          <strong>Tên người nhận: {selectedBill?.fullname}</strong>
           <br></br>
-          <strong>Số điện thoại: {selectedBill?.account_id?.phone}</strong>
+          <strong>Số điện thoại: {selectedBill?.phone}</strong>
           <br></br>
-          <strong>
-            Địa chỉ nhận hàng: {selectedBill?.account_id?.address}
-          </strong>
+          <strong>Địa chỉ nhận hàng: {selectedBill?.address}</strong>
           <br />
-          <p>{selectedBill?.address}</p>
           <Table className="table table-bordered mt-4">
             <thead>
               <tr>
-                <th>STT</th>
+                <th className="text-center">STT</th>
                 <th className="text-center">Hình ảnh</th>
                 <th>Tên sản phẩm</th>
-                <th>Đơn giá</th>
+                <th className="text-center">Đơn giá</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
               </tr>
@@ -164,7 +161,7 @@ const Chitiethoadon = () => {
               {Array.isArray(selectedBill1) && selectedBill1.length > 0 ? (
                 selectedBill1.map((item, index) => (
                   <tr key={index} className="align-middle">
-                    <td>{index + 1}</td>
+                    <td className="text-center">{index + 1}</td>
                     <td className="text-center">
                       {item.productEntity?.imageEntities?.length > 0 && (
                         <img
@@ -177,12 +174,9 @@ const Chitiethoadon = () => {
                       )}
                     </td>
                     <td>{item.productEntity?.product_name}</td>
-                    <td>{formatNumber(item.productEntity?.price)} VNĐ</td>
+                    <td>{formatNumber(item.price)} VNĐ</td>
                     <td>{item.quantity}</td>
-                    <td>
-                      {formatNumber(item.productEntity?.price * item.quantity)}{" "}
-                      VNĐ
-                    </td>
+                    <td>{formatNumber(item.price * item.quantity)} VNĐ</td>
                   </tr>
                 ))
               ) : (
@@ -245,9 +239,9 @@ const Chitiethoadon = () => {
             </nav>
           )} */}
             <div className="text-end total-amount">
-              <p className="text-danger">
-                {formatNumber(selectedBill?.total)} VNĐ
-              </p>
+              <h4 className="text-danger">
+                Tổng tiền: {formatNumber(selectedBill?.total)} VNĐ
+              </h4>
             </div>
           </div>
           <hr />
