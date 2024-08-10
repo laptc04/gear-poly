@@ -26,32 +26,67 @@ const Laphoadon = () => {
   const totalPrice = listCart.reduce((acc, item) => acc + item.price, 0);
   const formatNumber = (num) => num?.toLocaleString("de-DE");
 
+  const [account, setAccount] = useState();
   const [fullname, setFullname] = useState();
   const [phone, setPhone] = useState();
   const [address, setAddress] = useState();
+  const [errorPhone, setErrorPhone] = useState();
 
   useEffect(() => {
     const fetchBills = async () => {
-      if (listCart.length > 0) {
-        setFullname(listCart[0].accountEntity.fullname);
-        setPhone(listCart[0].accountEntity.phone);
-        setAddress(listCart[0].accountEntity.address);
-      } else {
-        try {
-          const response = await findAccountId(id);
-          console.log("Phản hồi từ API:", response.data); // Ghi log toàn bộ phản hồi từ API
-          setFullname(response.data.fullname);
-          setPhone(response.data.phone);
-          setAddress(response.data.address);
-        } catch (err) {
-          console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
-        }
+      try {
+        const response = await findAccountId(id);
+        console.log("Phản hồi từ API:", response.data);
+        setAccount(response.data.id); // Ghi log toàn bộ phản hồi từ API
+        setFullname(response.data.fullname);
+        setPhone(response.data.phone);
+        setAddress(response.data.address);
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
       }
     };
     fetchBills();
-  }, [listCart]);
+  }, [id]);
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^0[3|8|7|5|9]\d{8}$/;
+    return phoneRegex.test(phone);
+  };
 
   const addBill = async () => {
+    if (!fullname.trim()) {
+      return;
+    }
+    if (!phone.trim() || !validatePhone(phone)) {
+      return;
+    } else {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/bill/AllAccount"
+        );
+        const users = response.data;
+        const response1 = await findAccountId(id);
+        const phoneAccount = response1.data.phone;
+        const phonelExists = users.some((user) => user.phone === phone);
+        if (account === id) {
+          if (phone === phoneAccount) {
+          } else {
+            if (phonelExists) {
+              setErrorPhone("Số điện thoại này đã tồn tại!");
+              setTimeout(() => setErrorPhone(""), 3000);
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("There was an error fetching the users!", error);
+        setErrorPhone("Đã xảy ra lỗi khi kiểm tra Phone!");
+      }
+      setErrorPhone("");
+    }
+    if (!address.trim()) {
+      return;
+    }
     const newData = {
       account_id: id,
       fullname: fullname,
@@ -66,7 +101,7 @@ const Laphoadon = () => {
       );
       if (response.status === 201) {
         Swal.fire({
-          title: "Added to cart",
+          title: "Đã gửi đơn hàng",
           timer: 1500,
           icon: "success",
         });
@@ -104,6 +139,9 @@ const Laphoadon = () => {
               value={fullname}
               onChange={(e) => setFullname(e.target.value)}
             />
+            <small className="text-danger">
+              {!fullname ? "Tên không được bỏ trống" : ""}
+            </small>
           </div>
           <div className="mb-3">
             <label htmlFor="phone" className="form-label">
@@ -116,6 +154,13 @@ const Laphoadon = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
+            <small className="text-danger">
+              {!phone
+                ? "Số điện thoại không được bỏ trống"
+                : !validatePhone(phone)
+                ? "Số điện thoại không hợp lệ!"
+                : errorPhone}
+            </small>
           </div>
           <label htmlFor="address" className="form-label">
             Địa chỉ nhận hàng
@@ -128,6 +173,9 @@ const Laphoadon = () => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             ></textarea>
+            <small className="text-danger">
+              {!address ? "Địa chỉ không được bỏ trống" : ""}
+            </small>
           </div>
           <input type="hidden" name="email" />
           <h4>Sản phẩm đã chọn</h4>

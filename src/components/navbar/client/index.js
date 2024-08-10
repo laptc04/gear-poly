@@ -46,7 +46,7 @@ const NavbarClient = () => {
                 <CiShoppingCart />
               </i>
             </a>
-            <a href={`/user/userInfo/${id}`}>
+            <a href="/user/userinfo">
               <img
                 id="profileImage"
                 src="/images/profile.png"
