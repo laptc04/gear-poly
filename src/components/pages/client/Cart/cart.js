@@ -233,7 +233,7 @@ const plus =async (maGH) => {
               </div>
             ))
           ) : (
-            <p>Giỏ hàng của bạn hiện đang trống.</p>
+           <center><p>Giỏ hàng của bạn hiện đang trống.</p></center>
           )}
 
           <div className="d-flex justify-content-between">
