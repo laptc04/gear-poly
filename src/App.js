@@ -49,7 +49,7 @@ function App() {
                 path="userInfo/:userId/:detailBillId"
                 element={<Chitiethoadon />}
               />
-              <Route path="userInfo/:userId" element={<TTngdung />} />
+              <Route path="userinfo" element={<TTngdung />} />
             </Route>
             {/* admin */}
             <Route path="/admin" element={<AdminLayout />}>

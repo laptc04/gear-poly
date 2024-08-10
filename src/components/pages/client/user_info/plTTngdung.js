@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { fetchBillByAccountId } from "../../../../services/Bill";
-import { useParams } from "react-router-dom";
+import { fetchBillByAccountId, findAccountId } from "../../../../services/Bill";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 // const GradientText = styled.h2`
 //   font-size: 72px;
@@ -135,7 +136,7 @@ const GlobalStyle = styled.div`
 `;
 
 const TTngdung = () => {
-  const { userId } = useParams();
+  const userId = localStorage.getItem("userId");
   const [listBill, setListBill] = useState([]);
 
   useEffect(() => {
@@ -153,6 +154,137 @@ const TTngdung = () => {
     fetchBills();
   }, [userId]);
 
+  const [account, setAccount] = useState();
+  const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [errorEmail, setErrorEmail] = useState();
+  const [errorPhone, setErrorPhone] = useState();
+
+  const validateEmail = (email) => {
+    // Regular expression to check if the email ends with @gmail.com or @fpt.edu.vn
+    const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|fpt\.edu\.vn)$/;
+    return regex.test(email.trim());
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^0[3|8|7|5|9]\d{8}$/;
+    return phoneRegex.test(phone);
+  };
+
+  useEffect(() => {
+    const fetchBills = async () => {
+      try {
+        const response = await findAccountId(userId);
+        console.log("Phản hồi từ API:", response.data); // Ghi log toàn bộ phản hồi từ API
+        setAccount(response.data.id);
+        setFullname(response.data.fullname);
+        setPhone(response.data.phone);
+        setEmail(response.data.email);
+        setAddress(response.data.address);
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
+      }
+    };
+    fetchBills();
+  }, [userId]);
+
+  const updateAccount = async () => {
+    if (!fullname.trim()) {
+      return;
+    }
+    if (!email.trim() || !validateEmail(email)) {
+      return;
+    } else {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/bill/AllAccount"
+        );
+        const users = response.data;
+        const response1 = await findAccountId(userId);
+        const emailaccount = response1.data.email;
+        const emailExists = users.some((user) => user.email === email);
+        if (account === userId) {
+          if (email === emailaccount) {
+          } else {
+            if (emailExists) {
+              setErrorEmail("Email này đã tồn tại!");
+              setTimeout(() => setErrorEmail(""), 3000);
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("There was an error fetching the users!", error);
+        setErrorEmail("Đã xảy ra lỗi khi kiểm tra email!");
+      }
+    }
+    if (!phone.trim() || !validatePhone(phone)) {
+      return;
+    } else {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/bill/AllAccount"
+        );
+        const users = response.data;
+        const response1 = await findAccountId(userId);
+        const phoneAccount = response1.data.phone;
+        const phonelExists = users.some((user) => user.phone === phone);
+        if (account === userId) {
+          if (phone === phoneAccount) {
+          } else {
+            if (phonelExists) {
+              setErrorPhone("Số điện thoại này đã tồn tại!");
+              setTimeout(() => setErrorPhone(""), 3000);
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("There was an error fetching the users!", error);
+        setErrorPhone("Đã xảy ra lỗi khi kiểm tra Phone!");
+      }
+      setErrorPhone("");
+    }
+    if (!address.trim()) {
+      return;
+    }
+
+    const newData = {
+      id: userId,
+      fullname: fullname,
+      phone: phone,
+      email: email,
+      address: address,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/bill/update",
+        newData
+      );
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Cập nhật thành công",
+          timer: 1500,
+          icon: "success",
+        });
+      } else {
+        Swal.fire({
+          title: "Cập nhật thất bại",
+          timer: 1500,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Cập nhật thấy bại",
+        timer: 1500,
+        icon: "error",
+      });
+    }
+  };
+
   const renderTableRows = () => {
     return listBill.map((item, index) => (
       <tr className="align-middle" key={item.id || index}>
@@ -160,7 +292,7 @@ const TTngdung = () => {
         <td scope="row" className="text-center">
           <div className="text-nowrap">
             <div className="image-container">
-              {item.billEntity?.slice(0, 3).map((image, idx) => (
+              {item.detailBill?.slice(0, 3).map((image, idx) => (
                 <img
                   key={idx}
                   src={`/images/${image.ProductEntity?.imageEntities[0]?.name}`}
@@ -215,13 +347,7 @@ const TTngdung = () => {
                 <div className="row">
                   <div className="col"></div>
                   <div className="col-4">
-                    <form
-                      id="uploadForm"
-                      action="/update-user"
-                      method="post"
-                      encType="multipart/form-data"
-                      // onSubmit={handleSubmit}
-                    >
+                    <form onSubmit={(e) => e.preventDefault()}>
                       <div className="row position-relative">
                         <h3 className="nd mt-1" id="h2">
                           Tài khoản
@@ -245,7 +371,7 @@ const TTngdung = () => {
                           <StyledInput
                             className="rounded"
                             disabled
-                            value="ABC"
+                            value={account}
                             type="text"
                             placeholder="ID"
                           />
@@ -253,47 +379,72 @@ const TTngdung = () => {
                           <h3>Họ và tên</h3>
                           <StyledInput
                             className="rounded"
-                            value={listBill}
                             type="text"
-                            name="fullname"
+                            value={fullname}
+                            onChange={(e) => setFullname(e.target.value)}
                             placeholder="fullname"
                           />
-                          {/* <small className="text-danger">{hoten}</small> */}
+                          <br></br>
+                          <small className="text-danger">
+                            {!fullname.trim() ? "Tên không được bỏ trống" : ""}
+                          </small>
                           <h3>Số điện thoại</h3>
                           <StyledInput
                             className="rounded"
-                            value="{account?.phone}"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             type="text"
                             name="phone"
                             placeholder="phone"
                           />
-                          {/* <small className="text-danger">{sdt}</small> */}
+                          <br></br>
+                          <small className="text-danger">
+                            {!phone.trim()
+                              ? "Số điện thoại không được bỏ trống"
+                              : !validatePhone(phone)
+                              ? "Số điện thoại không hợp lệ!"
+                              : errorPhone}
+                          </small>
                           <h3>Email</h3>
                           <StyledInput
                             className="rounded"
                             type="email"
                             name="email"
                             placeholder="email"
-                            value="{account?.email}"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                           />
-                          {/* <small className="text-danger">{email}</small> */}
+                          <br></br>
+                          <small className="text-danger">
+                            {!email.trim()
+                              ? "Email không được bỏ trống"
+                              : !validateEmail(email)
+                              ? "Email không hợp lệ!"
+                              : errorEmail}
+                          </small>
                           <h3>Địa chỉ</h3>
                           <textarea
                             className="rounded"
-                            value="{account?.address}"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
                             style={{
-                              width: "60vh",
+                              width: "58vh",
                               backgroundColor: "rgba(171, 177, 181, 0.205)",
                             }}
                             name="address"
                             placeholder="address"
                           ></textarea>
-                          {/* <small className="text-danger">{diachi}</small> */}
+                          <br></br>
+                          <small className="text-danger">
+                            {!address.trim()
+                              ? "Địa chỉ không được bỏ trống"
+                              : ""}
+                          </small>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col d-inline mt-3 mb-3">
-                          <button type="submit" className="btn btn-1">
+                          <button onClick={updateAccount} className="btn btn-1">
                             Cập nhật tài khoản
                           </button>
                           <a
