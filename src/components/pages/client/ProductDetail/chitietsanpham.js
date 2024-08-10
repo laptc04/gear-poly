@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import image1 from "../../../../images/sanpham1.webp";
 import { fetch } from '../../../../services/ProductDt';
 import { listCatId } from '../../../../services/ListIndex'; // Import your function
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -11,6 +12,21 @@ const ProductDetail = () => {
   const { productID } = useParams();
   const [productDt, setProductDt] = useState(null);
   const [category, setCategory] = useState(null); // State for a single category
+
+
+  const [userId, setUserId] = React.useState('');
+  const [cookies] = useCookies(["token"]);
+
+
+  useEffect(() => {
+    if (cookies.token) {
+      // Giải mã user ID từ cookie
+      const decodedUserId = atob(cookies.token); // Giải mã Base64
+      setUserId(decodedUserId);
+    }
+  }, [cookies]);
+
+  console.log(userId)
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -37,8 +53,7 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     console.log('adding to cart');
-    
-    const account_id = 'A001';
+    const account_id = userId;
     const newData = {
       account_id,
       product_id: productDt.id,

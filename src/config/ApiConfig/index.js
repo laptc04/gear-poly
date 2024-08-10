@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Cookies } from "react-cookie";
 
-const BASE_URL = "http://localhost:3000"; // Cập nhật BASE_URL cho phù hợp
+const BASE_URL = "http://localhost:8080"; // Cập nhật BASE_URL cho phù hợp
 
 const request = async ({
   method = "GET",

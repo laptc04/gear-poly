@@ -18,15 +18,27 @@ const Login = () => {
         password: data.password,
       });
 
+      console.log(account)
+      // console.log(data.id);
+      // console.log(data.password);
       if (token) {
         const date = new Date();
         date.setHours(date.getHours() + 1);
-
-        setCookie("token", token, { path: "/", expires: date });
-
-        // Lưu vai trò người dùng vào cookie
+        // console.log(token)
+        // setCookie("token", token, { path: "/", expires: date });
+        console.log(cookies)
+        // setCookie(account)
+        // // Lưu vai trò người dùng vào cookie
         const roleValue = role ? "true" : "false";
         setCookie("role", roleValue, { path: "/", expires: date });
+
+        const encodedUserId = btoa(unescape(encodeURIComponent(account.id))); // Mã hóa Base64
+        // const encodedUserIdrole = btoa(unescape(encodeURIComponent(data?.vaiTro)));
+        setCookie("token", encodedUserId, {  path: "/", expires: date });
+        console.log(data?.id)
+        // setCookie("user", encodedUserId, { expires: date });
+        // setCookie("role", encodedUserIdrole, { expires: date });
+     
 
         // Lưu ID người dùng vào localStorage
         localStorage.setItem("userId", account.id);
@@ -39,8 +51,9 @@ const Login = () => {
     } catch (error) {
       setErrorMessage(error.message || "Có lỗi xảy ra");
     }
+    console.log(cookies.user)
   };
-
+  
   return (
     <div className="login-page">
       <div className="container">

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+
 import axios from "axios";
 
 const Cart = ({ account_id }) => {
@@ -6,10 +8,24 @@ const Cart = ({ account_id }) => {
   const [total, setTotal] = useState(0);
   const [quantities, setQuantities] = useState({});
 
-  const fetchCartItems = async (id) => {
+  const [userId, setUserId] = React.useState('');
+  const [cookies] = useCookies(["token"]);
+
+
+  useEffect(() => {
+    if (cookies.token) {
+      // Giải mã user ID từ cookie
+      const decodedUserId = atob(cookies.token); // Giải mã Base64
+      setUserId(decodedUserId);
+    }
+  }, [cookies]);
+
+  console.log(userId)
+
+  const fetchCartItems = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/cart/account/${id}`
+        `http://localhost:8080/api/cart/account/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -19,8 +35,7 @@ const Cart = ({ account_id }) => {
   };
 
   useEffect(() => {
-    const account_id2 = "A001";
-    fetchCartItems(account_id2)
+    fetchCartItems(userId)
       .then((data) => {
         if (data) {
           setCartItems(data);
@@ -36,12 +51,12 @@ const Cart = ({ account_id }) => {
       .catch((error) => {
         console.error("Error fetching cart items:", error);
       });
-  }, [account_id]);
+  }, [userId]);
 
   useEffect(() => {
     const calculateTotal = () => {
       const totalAmount = cartItems.reduce((acc, item) => {
-        return acc + item.quantity * item.productEntity.price;
+        return acc + item.quantity * item.price;
       }, 0);
       setTotal(totalAmount);
     };
@@ -79,11 +94,10 @@ const Cart = ({ account_id }) => {
   };
 
   const removeFromCart = (id) => {
-    const account_id2 = "A001";
-    const idCart = 246; // Sử dụng id truyền vào thay vì hardcode
+    console.log(id)
     axios
       .delete(
-        `http://localhost:8080/api/cart/delete-cart/${account_id2}/${idCart}`
+        `http://localhost:8080/api/cart/delete-cart/${id}`
       )
       .then((response) => {
         console.log("Item removed:", response);
@@ -107,13 +121,13 @@ const Cart = ({ account_id }) => {
                   <img
                     height="60px"
                     width="60px"
-                    src={`http://localhost:8080/images/abc.png`} // Use item.image if available
+                    src={`http://localhost:8080/images/${item.product_id}`} // Use item.image if available
                     className="d-block"
-                    alt={item.productEntity.product_name}
+                    alt={item.product_id}
                   />
                   <div className="flex-grow-1">
                     <h5 className="card-title mb-1">
-                      {item.productEntity.product_name}
+                      {item.product_name}
                     </h5>
                   </div>
                   <div className="d-flex align-items-center justify-content-between">
@@ -155,7 +169,7 @@ const Cart = ({ account_id }) => {
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
-                      }).format(item.productEntity.price)}
+                      }).format(item.price)}
                     </p>
 
                     <button
