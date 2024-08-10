@@ -50,5 +50,26 @@ const getProfile = async () => {
     throw error;
   }
 };
+// const registerApi = async ({ id, fullname, email, password}) => {
+//   try {
+//     const res = await request({
+//       method: "POST",
+//       path: "/api/auth/register",
+//       data: {
+//         id,
+//         fullname,
+//         email,
+//         password,
+//       },
+//     });
+
+//     return res;
+    
+
+//   } catch (error) {
+//     console.error("Lỗi API đăng ký:", error);
+//     throw error;
+//   }
+// };
 
 export { loginApi, getProfile };
