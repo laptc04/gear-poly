@@ -174,7 +174,7 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
                   </td>
                   <td className="text-center">
                     <a
-                      href={`/admin/bill/${btoa(
+                      href={`/admin/bill/${detail.account.id}/${btoa(
                         unescape(
                           encodeURIComponent(`${detail.id}_${uniqueElement}`)
                         )

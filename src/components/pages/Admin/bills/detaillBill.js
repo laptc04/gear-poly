@@ -20,7 +20,7 @@ const InvoiceContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 900px;
   margin: 20px auto;
-  margin-top: 150px;
+  margin-top: 50px;
 `;
 
 // const PrimaryText = styled.h1`
@@ -74,9 +74,9 @@ const formatDate = (dateString) => {
   return `${day}/${month}/${year}`;
 };
 
-const Chitiethoadon = () => {
+const DetaillBill = () => {
   //load data lên table detailBill
-  const { detailBillId } = useParams();
+  const { id, detailBillId } = useParams();
   const [selectedBill, setSelectedBill] = useState([]);
   const [selectedBill1, setSelectedBill1] = useState([]);
   const [error, setError] = useState(null);
@@ -121,11 +121,11 @@ const Chitiethoadon = () => {
       try {
         console.log(
           "Fetching bill with",
-          userId,
+          id,
           decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
         );
         const response = await fetchBillByaccId(
-          userId,
+          id,
           decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
         );
         console.log("Fetched bill data:", response?.data);
@@ -137,13 +137,10 @@ const Chitiethoadon = () => {
       }
     };
 
-    if (
-      userId &&
-      decodeURIComponent(escape(atob(detailBillId)).split("_")[0])
-    ) {
+    if (id && decodeURIComponent(escape(atob(detailBillId)).split("_")[0])) {
       fetchProductData();
     }
-  }, [userId, decodeURIComponent(escape(atob(detailBillId)).split("_")[0])]);
+  }, [id, decodeURIComponent(escape(atob(detailBillId)).split("_")[0])]);
 
   useEffect(() => {
     const fetchSelectedBill = async () => {
@@ -243,6 +240,7 @@ const Chitiethoadon = () => {
               </h4>
             </div>
           </div>
+
           <hr />
           <div className="row mt-4">
             <div className="col-2"></div>
@@ -294,4 +292,4 @@ const Chitiethoadon = () => {
     </div>
   );
 };
-export default Chitiethoadon;
+export default DetaillBill;

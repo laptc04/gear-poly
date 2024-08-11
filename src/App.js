@@ -25,6 +25,7 @@ import ThongKeTongChiTieu from "./components/pages/Admin/statistics/totalnam";
 import Product from "./components/pages/Admin/products/product";
 import Categoties from "./components/pages/Admin/categories/categories";
 import ProductCustomerDetails from "./components/pages/Admin/bills";
+import DetaillBill from "./components/pages/Admin/bills/detaillBill";
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
               <Route path="products" element={<Product />} />
               <Route path="categories" element={<Categoties />} />
               <Route path="bill" element={<ProductCustomerDetails />} />
-              <Route path="bill/:detailBillId" element={<Chitiethoadon />} />
+              <Route path="bill/:id/:detailBillId" element={<DetaillBill />} />
               <Route path="statistics" element={<ThongKeTongChiTieu />} />
               <Route path="wherehouse" element={<Kho />} />
             </Route>
