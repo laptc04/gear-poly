@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import image1 from "../../../../images/sanpham1.webp";
-import { fetch } from '../../../../services/ProductDt';
-import { listCatId } from '../../../../services/ListIndex'; // Import your function
+import { fetch } from "../../../../services/ProductDt";
+import { listCatId } from "../../../../services/ListIndex"; // Import your function
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -12,22 +12,43 @@ const ProductDetail = () => {
   const { productID } = useParams();
   const [productDt, setProductDt] = useState(null);
   const [category, setCategory] = useState(null); // State for a single category
-
-
-  const [userId, setUserId] = React.useState('');
-  const [cookies] = useCookies(["token"]);
-
   const [soluong, setSoluong] = useState(1);
 
-  useEffect(() => {
-    if (cookies.token) {
-      // Giải mã user ID từ cookie
-      const decodedUserId = atob(cookies.token); // Giải mã Base64
-      setUserId(decodedUserId);
-    }
-  }, [cookies]);
+  const [userId, setUserId] = React.useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
 
-  console.log(userId)
+  useEffect(() => {
+    const storedOriginalToken = sessionStorage.getItem("originalToken");
+
+    if (cookies.token && storedOriginalToken) {
+      try {
+        // Giải mã token hiện tại từ cookie
+        const decodedToken = decodeURIComponent(escape(atob(cookies.token)));
+        const extractedUserId = decodedToken.split("_")[0];
+
+        // Giải mã token gốc đã lưu
+        const originalDecodedToken = decodeURIComponent(
+          escape(atob(storedOriginalToken))
+        );
+        const originalUserId = originalDecodedToken.split("_")[0];
+
+        if (cookies.token !== storedOriginalToken) {
+          console.log("Token đã thay đổi, đặt lại token gốc.");
+          setCookie("token", storedOriginalToken, {
+            HttpOnly: true,
+            Secure: true,
+            path: "/",
+            expires: new Date(Date.now() + 3600 * 1000),
+          });
+        } else {
+          setUserId(originalUserId); // Đặt ID người dùng vào trạng thái
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra token:", error);
+      }
+    }
+  }, [cookies.token, setCookie]);
+  console.log(userId);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -52,38 +73,41 @@ const ProductDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const addToCart = async (id,gia) => {
-    console.log('adding to cart');
+  const addToCart = async (id, gia) => {
+    console.log("adding to cart");
     const account_id = userId;
     const newData = {
-      accountEntity: {id: account_id},
-      productEntity:{id: id},
+      accountEntity: { id: account_id },
+      productEntity: { id: id },
       quantity: soluong,
-      price: gia
+      price: gia,
     };
-    console.log(newData)
+    console.log(newData);
     try {
-      const response = await axios.post('http://localhost:8080/api/cart', newData);
-      console.log(response)
+      const response = await axios.post(
+        "http://localhost:8080/api/cart",
+        newData
+      );
+      console.log(response);
       if (response.status === 201) {
         Swal.fire({
-          title: 'Added to cart',
+          title: "Added to cart",
           timer: 1500,
-          icon: "success"
+          icon: "success",
         });
       } else {
         Swal.fire({
-          title: 'Can not add to cart',
+          title: "Can not add to cart",
           timer: 1500,
-          icon: "error"
+          icon: "error",
         });
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
       Swal.fire({
-        title: 'Can not add to cart',
+        title: "Can not add to cart",
         timer: 1500,
-        icon: "error"
+        icon: "error",
       });
     }
   };
@@ -104,15 +128,25 @@ const ProductDetail = () => {
                 <p>Danh mục:</p>
               </div>
               <div className="col-9">
-              <strong>{category?.categories_name || 'Loading category...'}</strong> {/* Display category name */}
+                <strong>
+                  {category?.categories_name || "Loading category..."}
+                </strong>{" "}
+                {/* Display category name */}
               </div>
             </div>
             <h2 className="text-danger">
               <p className="text-danger">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productDt.price)}
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(productDt.price)}
               </p>
             </h2>
-            <Button type="button" onClick={() => addToCart(productDt.id,productDt.price)} className="btn btn-primary mt-5">
+            <Button
+              type="button"
+              onClick={() => addToCart(productDt.id, productDt.price)}
+              className="btn btn-primary mt-5"
+            >
               Thêm vào giỏ hàng
             </Button>
           </div>
