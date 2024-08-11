@@ -137,7 +137,9 @@ const GlobalStyle = styled.div`
 `;
 
 const TTngdung = () => {
-  // const userId = localStorage.getItem("userId");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10; // Number of bills per page
   const uniqueElement = Math.random();
   const [listBill, setListBill] = useState([]);
   const [userId, setUserId] = React.useState("");
@@ -145,7 +147,6 @@ const TTngdung = () => {
 
   useEffect(() => {
     const storedOriginalToken = sessionStorage.getItem("originalToken");
-
     if (cookies.token && storedOriginalToken) {
       try {
         // Giải mã token hiện tại từ cookie
@@ -179,9 +180,9 @@ const TTngdung = () => {
     const fetchBills = async () => {
       try {
         const response = await fetchBillByAccountId(userId);
-        console.log("Phản hồi từ API:", response.data); // Ghi log toàn bộ phản hồi từ API
-        console.log(userId);
-        setListBill(response.data.reverse());
+        const bills = response.data.reverse();
+        setTotalPages(Math.ceil(bills.length / pageSize));
+        setListBill(bills);
       } catch (err) {
         console.error("Lỗi khi lấy dữ liệu hóa đơn:", err);
       }
@@ -322,16 +323,20 @@ const TTngdung = () => {
   };
 
   const renderTableRows = () => {
-    return listBill.map((item, index) => (
+    const startIndex = currentPage * pageSize;
+    const endIndex = startIndex + pageSize;
+    const currentBills = listBill.slice(startIndex, endIndex);
+
+    return currentBills.map((item, index) => (
       <tr className="align-middle" key={item.id || index}>
-        <td>{index + 1}</td>
+        <td>{startIndex + index + 1}</td>
         <td scope="row" className="text-center">
           <div className="text-nowrap">
             <div className="image-container">
               {item.detailBill?.slice(0, 3).map((image, idx) => (
                 <img
                   key={idx}
-                  src={`/images/${image.ProductEntity?.imageEntities[0]?.name}`}
+                  src={`http://localhost:8080/images/${image.productEntity?.imageEntities[0]?.name}`}
                   className="rounded mx-auto ms-1 d-inline-block align-middle main-image"
                   width="50px"
                   height="50px"
@@ -516,11 +521,8 @@ const TTngdung = () => {
                       </thead>
                       <tbody>{renderTableRows()}</tbody>
                     </table>
-                    {/* <nav className="tohop" aria-label="Page navigation example">
-                      <ul
-                        className="pagination"
-                        style={{ display: totalPages > 1 ? "block" : "none" }}
-                      >
+                    <nav aria-label="Page navigation">
+                      <ul className="pagination">
                         <li
                           className={`page-item ${
                             currentPage === 0 ? "disabled" : ""
@@ -528,9 +530,8 @@ const TTngdung = () => {
                         >
                           <a
                             className="page-link"
-                            href={`/user/nguoidung?page=${
-                              currentPage > 0 ? currentPage - 1 : 0
-                            }&size=10`}
+                            href="#"
+                            onClick={() => setCurrentPage(currentPage - 1)}
                           >
                             Previous
                           </a>
@@ -544,7 +545,8 @@ const TTngdung = () => {
                           >
                             <a
                               className="page-link"
-                              href={`/user/nguoidung?page={i}&size=10`}
+                              href="#"
+                              onClick={() => setCurrentPage(i)}
                             >
                               {i + 1}
                             </a>
@@ -557,17 +559,14 @@ const TTngdung = () => {
                         >
                           <a
                             className="page-link"
-                            href={`/user/nguoidung?page=${
-                              currentPage < totalPages - 1
-                                ? currentPage + 1
-                                : totalPages - 1
-                            }&size=10`}
+                            href="#"
+                            onClick={() => setCurrentPage(currentPage + 1)}
                           >
                             Next
                           </a>
                         </li>
                       </ul>
-                    </nav> */}
+                    </nav>
                   </div>
                 </div>
               </div>
