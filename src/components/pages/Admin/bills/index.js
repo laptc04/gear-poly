@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { allBill } from "../../../../services/Bill";
-
+import { allStatus } from "../../../../services/Bill"; // Assuming you have a service for fetching statuses
+import Swal from "sweetalert2";
+import axios from "axios";
 const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [donhang, setDonhang] = useState([]);
+  const [statuses, setStatuses] = useState([]); // State to hold all statuses
+  const [searchTerm, setSearchTerm] = useState("");
   const uniqueElement = Math.random();
   const startIndex = currentPage * pageSize;
   const endIndex = startIndex + pageSize;
-
-  const [donhang, setDonhang] = useState([]);
   const donhangall = donhang.slice(startIndex, endIndex);
 
+  // Fetch bills
   useEffect(() => {
     const fetchBills = async () => {
       try {
@@ -25,14 +29,22 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
     };
 
     fetchBills();
-  }, [pageSize]); // Update pageSize in dependency array
+  }, [pageSize]);
 
+  // Fetch all statuses
   useEffect(() => {
-    // Adjust currentPage when totalPages change
-    setCurrentPage((prevPage) => Math.min(prevPage, totalPages - 1));
-  }, [totalPages]);
+    const fetchStatuses = async () => {
+      try {
+        const response = await allStatus();
+        setStatuses(response.data);
+        console.log(statuses);
+      } catch (err) {
+        console.error("Lỗi khi lấy dữ liệu trạng thái:", err);
+      }
+    };
 
-  const [searchTerm, setSearchTerm] = useState("");
+    fetchStatuses();
+  }, []);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -44,7 +56,6 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
   };
 
   const handleRefresh = () => {
-    // Add the refresh logic here
     setPageSize(10); // Reset pageSize to default
     setCurrentPage(0); // Reset to first page
   };
@@ -70,19 +81,63 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
   };
 
   const handlePageSizeChange = (e) => {
-    // Lấy giá trị nhập vào
     let value = Number(e.target.value);
-
     if (isNaN(value) || value < 1) {
       value = pageSize;
-      setPageSize(value);
-      return;
     }
     setPageSize(value);
   };
 
+  const handleStatusChange = (e, invoiceId) => {
+    const newStatusId = e.target.value;
+    // // Update the status locally (if needed)
+    setDonhang((prevDonhang) =>
+      prevDonhang.map((detail) =>
+        detail.id === invoiceId
+          ? {
+              ...detail,
+              invoice_status: { ...detail.invoice_status, id: newStatusId },
+            }
+          : detail
+      )
+    );
+  };
+  const handleUpdateStatus = async (statusId, invoiceId) => {
+    const newData = {
+      status_id: statusId,
+      id: invoiceId,
+    };
+    console.log(statusId);
+    console.log(invoiceId);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/bill/updateStatusBill",
+        newData
+      );
+      if (response.status === 201) {
+        Swal.fire({
+          title: "Cập nhật thành công",
+          timer: 1500,
+          icon: "success",
+        });
+      } else {
+        Swal.fire({
+          title: "Cập nhật thất bại",
+          timer: 1500,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Cập nhật thấy bại",
+        timer: 1500,
+        icon: "error",
+      });
+    }
+  };
+
   return (
-    <div className="container">
+    <div className="container-fluid">
       <h1 className="my-4">ĐƠN HÀNG</h1>
 
       {/* Search Form */}
@@ -126,11 +181,11 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
                 <th>ID khách hàng</th>
                 <th>Họ tên khách hàng</th>
                 <th>Số điện thoại</th>
-                <th>Email</th>
                 <th className="text-center">Ảnh sản phẩm</th>
                 <th>Số tiền</th>
                 <th>Ngày</th>
-                <th className="text-center">Xem chi tiết</th>
+                <th>Trạng thái</th>
+                <th className="text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>
@@ -140,7 +195,6 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
                   <td>{detail.account.id}</td>
                   <td>{detail.account.fullname}</td>
                   <td>{detail.account.phone}</td>
-                  <td>{detail.account.email}</td>
                   <td scope="row" className="text-center">
                     <div className="text-nowrap">
                       <div className="image-container">
@@ -172,7 +226,29 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
                       year: "numeric",
                     })}
                   </td>
+                  <td>
+                    <select
+                      value={detail.invoice_status.id}
+                      onChange={(e) => handleStatusChange(e, detail.id)}
+                    >
+                      {statuses.map((status) => (
+                        <option key={status.id} value={status.id}>
+                          {status.status_name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+
                   <td className="text-center">
+                    <button
+                      className="btn btn-2 btn-primary me-2"
+                      onClick={() =>
+                        handleUpdateStatus(detail.invoice_status.id, detail.id)
+                      }
+                    >
+                      Cập nhật
+                    </button>
+
                     <a
                       href={`/admin/bill/${detail.account.id}/${btoa(
                         unescape(
