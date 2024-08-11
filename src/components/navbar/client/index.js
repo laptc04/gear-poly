@@ -28,19 +28,6 @@ const NavbarClient = () => {
             />
           </a>
           <div className="d-flex align-items-center m-3">
-            <input
-              name="product_name"
-              className="form-control "
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              style={{ width: "500px" }}
-            />
-            <button type="submit" className="btn btn-outline-dark  m-1">
-              <i>
-                <AiOutlineSearch />
-              </i>
-            </button>
             <button className="btn btn-outline-dark  m-1" type="submit">
               <i>
                 <AiOutlineBell />
