@@ -213,7 +213,7 @@ const Chitiethoadon = () => {
                     <td className="text-center">
                       {item.productEntity?.imageEntities?.length > 0 && (
                         <img
-                          src={`/images/${item.productEntity.imageEntities[0].name}`}
+                          src={`http://localhost:8080/images/${item.productEntity.imageEntities[0].name}`}
                           className="rounded mx-auto d-inline-block align-middle main-image"
                           width="50"
                           height="50"

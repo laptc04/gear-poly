@@ -24,6 +24,7 @@ import Qluser from "./components/pages/Admin/users/qltkuser";
 import ThongKeTongChiTieu from "./components/pages/Admin/statistics/totalnam";
 import Product from "./components/pages/Admin/products/product";
 import Categoties from "./components/pages/Admin/categories/categories";
+import ProductCustomerDetails from "./components/pages/Admin/bills";
 
 function App() {
   return (
@@ -56,6 +57,8 @@ function App() {
               <Route path="home" element={<Qluser />} />
               <Route path="products" element={<Product />} />
               <Route path="categories" element={<Categoties />} />
+              <Route path="bill" element={<ProductCustomerDetails />} />
+              <Route path="bill/:detailBillId" element={<Chitiethoadon />} />
               <Route path="statistics" element={<ThongKeTongChiTieu />} />
               <Route path="wherehouse" element={<Kho />} />
             </Route>

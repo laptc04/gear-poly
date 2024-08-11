@@ -23,7 +23,7 @@ const AdminNavbar = () => {
           <Nav.Link href="/admin/category" title="DANH MỤC">
             DANH MỤC
           </Nav.Link>
-          <Nav.Link href="/admin/qldonhang" title="ĐƠN HÀNG">
+          <Nav.Link href="/admin/bill" title="ĐƠN HÀNG">
             ĐƠN HÀNG
           </Nav.Link>
           <Nav.Link href="/admin/statistics" title="THỐNG KÊ">

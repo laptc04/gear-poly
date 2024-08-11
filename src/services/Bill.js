@@ -8,6 +8,8 @@ const ACCOUNT = "http://localhost:8080/api/bill/account";
 export const fetchBillByAccountId = (accid) =>
   axios.get(`${REST_API_BASE_URL}/${accid}`);
 
+//Lấy toàn bộ hóa đơn
+export const allBill = () => axios.get(`${REST_API_BASE_URL}`);
 //Tạo hóa đơn
 export const findCartbyAccountId = (id) =>
   axios.get(`${REST_API_BASE_URL_CART}/${id}`);
