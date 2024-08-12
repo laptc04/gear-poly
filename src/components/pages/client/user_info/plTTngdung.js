@@ -359,6 +359,7 @@ const TTngdung = () => {
             year: "numeric",
           })}
         </td>
+        <td>{item.invoice_status.status_name}</td>
         <td className="text-center">
           <a
             href={`/user/userInfo/${btoa(
@@ -516,6 +517,7 @@ const TTngdung = () => {
                           </th>
                           <th>Tổng tiền</th>
                           <th>Ngày mua</th>
+                          <th>Trạng thái</th>
                           <th className="text-center">Hành động</th>
                         </tr>
                       </thead>
