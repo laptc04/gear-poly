@@ -117,7 +117,19 @@ const ProductDetail = () => {
       <form action="/user/chitiet" method="post" encType="multipart/form-data">
         <div className="row mt-3">
           <div className="col-5">
-            <img src={image1} className="card-img-top" alt="Example" />
+          {Array.isArray(productDt.imageEntity) &&
+                        productDt.imageEntity.length > 0 && (
+                          <img
+                            className="image"
+                            src={`http://localhost:8080/images/${productDt.imageEntity[0].name}`}
+                            alt="Hình ảnh không hiển thị"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        )}
           </div>
           <div className="col-7">
             <hr />
