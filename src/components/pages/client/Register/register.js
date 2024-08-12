@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './register.css';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [id, setId] = useState('');
@@ -160,8 +161,14 @@ const Register = () => {
                                 </div>
                             </form>
                             <div className="mt-3 text-center">
-                                <a href="user/login" className="link-offset-3 link-underline link-underline-opacity-0">Đã có tài khoản? Đăng nhập</a>
+                                <Link
+                                    to="/user/login"
+                                    className="link-offset-3 link-underline link-underline-opacity-0"
+                                >
+                                    Đã có tài khoản? Đăng nhập
+                                </Link>
                             </div>
+
                         </div>
                     </div>
                 </div>

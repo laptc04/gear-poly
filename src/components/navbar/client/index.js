@@ -63,7 +63,7 @@ const NavbarClient = () => {
           </div>
           <Dropdown>
             <Dropdown.Toggle
-              variant="success"
+              variant="primary"
               id="dropdown-basic"
               style={{ height: "35px", width: "205px", marginTop: "5px" }}
             >
