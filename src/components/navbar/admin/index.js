@@ -33,10 +33,13 @@ const AdminNavbar = () => {
           <Nav.Link href="/admin/bill" title="ĐƠN HÀNG">
             ĐƠN HÀNG
           </Nav.Link>
+          <Nav.Link href="/admin/invoice-status" title="TRẠNG THÁI">
+            TRẠNG THÁI
+          </Nav.Link>
           <Nav.Link href="/admin/salesstatistics" title="THỐNG KÊ">
             THỐNG KÊ
           </Nav.Link>
-          <Nav.Link onClick={handleLogout}>ĐĂNG XUÁT</Nav.Link>
+          <Nav.Link onClick={handleLogout}>ĐĂNG XUẤT</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
