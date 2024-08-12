@@ -25,10 +25,10 @@ import ProductFrom from "./components/pages/Admin/products/productForm";
 import Categoties from "./components/pages/Admin/categories/categories";
 import ProductCustomerDetails from "./components/pages/Admin/bills";
 import DetaillBill from "./components/pages/Admin/bills/detaillBill";
-
+import InvoiceStatus from "./components/pages/Admin/invoice_status";
 import CategotiesForm from "./components/pages/Admin/categories/categoriesForm";
 import SalesStatistics from "./components/pages/Admin/salesStatistics";
-
+import Invoice from "./components/pages/Admin/invoice_status/tableInvoice-status";
 function App() {
   return (
     <Router>
@@ -66,7 +66,8 @@ function App() {
               <Route path="productsForm/:id" element={<ProductFrom />} />
               <Route path="categories" element={<Categoties />} />
               <Route path="categoriesForm" element={<CategotiesForm />} />
-              <Route path="categoriesForm/:id" element={<CategotiesForm />} />
+              <Route path="invoice-status" element={<Invoice />} />
+              <Route path="invoice-statusFrom" element={<InvoiceStatus />} />
               {/* <Route path="statistics" element={<ThongKeTongChiTieu />} /> */}
               <Route path="wherehouse" element={<Kho />} />
               <Route path="salesstatistics" element={<SalesStatistics />} />

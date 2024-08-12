@@ -52,7 +52,7 @@ const Login = () => {
         localStorage.setItem("userId", account.id);
 
         // Chuyển hướng đến trang dựa trên vai trò
-        navigate(role ? "/admin" : "/");
+        navigate(role ? "/admin/home" : "/");
       } else {
         setErrorMessage("Tên đăng nhập hoặc mật khẩu không chính xác");
       }
