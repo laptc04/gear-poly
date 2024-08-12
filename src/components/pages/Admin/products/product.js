@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Button, Modal, Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null); // null: no filter, true: visible, false: hidden
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [product_name, setProduct_Name] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  const [currentProduct, setCurrentProduct] = useState(null); // Product currently being viewed
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,8 +21,6 @@ const Product = () => {
           axios.get("http://localhost:8080/api/categories"),
         ]);
 
-        console.log("Products:", productResponse.data);
-        console.log("Categories:", categoryResponse.data);
         setProducts(productResponse.data);
         setCategories(categoryResponse.data);
         setFilteredProducts(productResponse.data);
@@ -53,86 +49,51 @@ const Product = () => {
     setSelectedFilter(null);
     setFilteredProducts(products);
   };
-  
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get('http://localhost:8080/api/products/searchProd', {
-  //         params: {
-  //             product_name: product_name || "",
-  //             minPrice: minPrice || "",
-  //             maxPrice: maxPrice || "",
-  //         }, 
-  //     });
-  //     setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
-  // } catch (error) {
-  //     console.error('Error searching products:', error);
-  // }
-  // };
 
   const getCategoryName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
     return category ? category.categories_name : "Không tìm thấy";
   };
 
+  const handleClose = () => setShow(false);
+  const handleShow = (product) => {
+    setCurrentProduct(product);
+    setShow(true);
+  };
+
   return (
     <main className="container mt-5">
       <div className="mb-4">
         <div className="mb-3">
-        {/* <form className="d-flex mb-4" onSubmit={handleSubmit}>
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Tìm kiếm theo tên"
-            value={product_name}
-            onChange={(e) => setProduct_Name(e.target.value)}
-          />
-          <input
-            className="form-control me-2"
-            type="number"
-            placeholder="Giá thấp nhất"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            min="0"
-          />
-          <input
-            className="form-control me-2"
-            type="number"
-            placeholder="Giá cao nhất"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            min="0"
-          />
-          <button className="btn btn-outline-success" type="submit">
-            Tìm
-          </button>
-        </form> */}
-          <a className="btn btn-success me-2" onClick={handleAddClick}>
+          <Button variant="success" className="me-2" onClick={handleAddClick}>
             Thêm sản phẩm mới
-          </a>
-          <a
-            className={`btn btn-primary me-2 ${selectedFilter === false ? "active" : ""}`}
+          </Button>
+          <Button
+            variant="primary"
+            className={`me-2 ${selectedFilter === false ? "active" : ""}`}
             onClick={() => filterProducts(false)}
           >
             Sản phẩm hiện
-          </a>
-          <a
-            className={`btn btn-primary me-2 ${selectedFilter === true ? "active" : ""}`}
+          </Button>
+          <Button
+            variant="primary"
+            className={`me-2 ${selectedFilter === true ? "active" : ""}`}
             onClick={() => filterProducts(true)}
           >
             Sản phẩm ẩn
-          </a>
-          <a
-            className={`btn btn-secondary me-2 ${selectedFilter === null ? "active" : ""}`}
+          </Button>
+          <Button
+            variant="secondary"
+            className={`me-2 ${selectedFilter === null ? "active" : ""}`}
             onClick={showAllProducts}
           >
             Tất cả sản phẩm
-          </a>
+          </Button>
           <br />
           <br />
         </div>
         <div className="table-responsive">
-          <table className="table table-hover table-sm">
+          <Table hover bordered>
             <thead>
               <tr>
                 <th>Tên</th>
@@ -181,53 +142,9 @@ const Product = () => {
                     </div>
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      className="btn btn-info"
-                      data-bs-toggle="modal"
-                      data-bs-target={`#descriptionModal${item.id}`}
-                    >
+                    <Button variant="info" onClick={() => handleShow(item)}>
                       Xem mô tả
-                    </button>
-                    <div
-                      className="modal fade"
-                      id={`descriptionModal${item.id}`}
-                      tabIndex="-1"
-                      aria-labelledby={`descriptionModalLabel${item.id}`}
-                      aria-hidden="true"
-                    >
-                      <div className="modal-dialog">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h5
-                              className="modal-title"
-                              id={`descriptionModalLabel${item.id}`}
-                            >
-                              Mô tả sản phẩm
-                            </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
-                          </div>
-                          <div className="modal-body">
-                            {item.description ||
-                              "Không có mô tả cho sản phẩm này"}
-                          </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              data-bs-dismiss="modal"
-                            >
-                              Đóng
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    </Button>
                   </td>
                   <td>
                     <div className="d-flex align-items-center">
@@ -237,58 +154,40 @@ const Product = () => {
                     </div>
                   </td>
                   <td>
-                    <a
-                      className="btn btn-primary"
-                      href={`/admin/productsForm/${item.id}`}
-                    >
+                    <Button variant="primary" onClick={() => handleEditClick(item.id)}>
                       Sửa
-                    </a>
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         </div>
-        {/* <nav aria-label="Page navigation">
-          <ul className="pagination">
-            <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
-              <a
-                className="page-link"
-                href="#"
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Previous
-              </a>
-            </li>
-            {[...Array(totalPages).keys()].map((i) => (
-              <li
-                key={i}
-                className={`page-item ${i === currentPage ? "active" : ""}`}
-              >
-                <a
-                  className="page-link"
-                  href="#"
-                  onClick={() => setCurrentPage(i)}
-                >
-                  {i + 1}
-                </a>
-              </li>
-            ))}
-            <li
-              className={`page-item ${
-                currentPage === totalPages - 1 ? "disabled" : ""
-              }`}
-            >
-              <a
-                className="page-link"
-                href="#"
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav> */}
+
+        {/* Modal for Viewing Description */}
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {currentProduct ? currentProduct.product_name : "Thông tin sản phẩm"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {currentProduct ? (
+              <>
+                <p><strong>Giá:</strong> {currentProduct.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</p>
+                <p><strong>Danh mục:</strong> {getCategoryName(currentProduct.categories_id)}</p>
+                <p><strong>Mô tả:</strong> {currentProduct.description || "Không có mô tả cho sản phẩm này"}</p>
+              </>
+            ) : (
+              <p>Không có thông tin sản phẩm để hiển thị.</p>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Đóng
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </main>
   );
