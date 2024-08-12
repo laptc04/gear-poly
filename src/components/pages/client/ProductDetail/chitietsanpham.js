@@ -91,13 +91,13 @@ const ProductDetail = () => {
       console.log(response);
       if (response.status === 201) {
         Swal.fire({
-          title: "Added to cart",
+          title: "Thêm giỏ hàng thành công",
           timer: 1500,
           icon: "success",
         });
       } else {
         Swal.fire({
-          title: "Can not add to cart",
+          title: "Vui Lòng đăng nhập tài khoản",
           timer: 1500,
           icon: "error",
         });
@@ -105,7 +105,7 @@ const ProductDetail = () => {
     } catch (error) {
       console.error("Error adding to cart:", error);
       Swal.fire({
-        title: "Can not add to cart",
+        title: "Vui Lòng đăng nhập tài khoản",
         timer: 1500,
         icon: "error",
       });
