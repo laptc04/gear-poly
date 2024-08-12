@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../../../../services/Auth";
+import { Link } from 'react-router-dom';
+
 import "./login.css";
 
 const Login = () => {
@@ -52,7 +54,7 @@ const Login = () => {
         localStorage.setItem("userId", account.id);
 
         // Chuyển hướng đến trang dựa trên vai trò
-        navigate(role ? "/admin" : "/");
+        navigate(role ? "/admin/home" : "/");
       } else {
         setErrorMessage("Tên đăng nhập hoặc mật khẩu không chính xác");
       }
@@ -69,7 +71,7 @@ const Login = () => {
           <div className="col-lg-5 col-md-7 col-sm-9">
             <div className="login-container">
               <h1 className="text-center pb-2 login-title">
-                <a href="/index">Đăng nhập</a>
+                <a href="/index">Đăng nhập GearPoly</a>
               </h1>
               {errorMessage && (
                 <div className="alert alert-danger" role="alert">
@@ -105,17 +107,6 @@ const Login = () => {
                     {...register("password")}
                   />
                 </div>
-                <div className="form-check mb-3">
-                  <input
-                    id="remember"
-                    name="remember"
-                    className="form-check-input"
-                    type="checkbox"
-                  />
-                  <label className="form-check-label" htmlFor="remember">
-                    Nhớ tài khoản
-                  </label>
-                </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary mt-1">
                     Đăng nhập
@@ -123,13 +114,14 @@ const Login = () => {
                 </div>
               </form>
               <div className="mt-3 text-center">
-                <a
-                  href="/register"
+                <Link
+                  to="/user/register"
                   className="link-offset-3 link-underline link-underline-opacity-0"
                 >
                   Tạo tài khoản mới?
-                </a>
+                </Link>
               </div>
+
             </div>
           </div>
         </div>
