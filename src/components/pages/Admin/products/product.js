@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Sync } from "@mui/icons-material";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("-1");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState(null); // null: no filter, true: visible, false: hidden
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [product_name, setProduct_Name] = useState("");
@@ -23,10 +23,9 @@ const Product = () => {
           axios.get("http://localhost:8080/api/categories"),
         ]);
 
-        console.log("Products:", productResponse.data);
-        console.log("Categories:", categoryResponse.data);
-        setProducts(productResponse?.data);
+        setProducts(productResponse.data);
         setCategories(categoryResponse.data);
+        setFilteredProducts(productResponse.data); // Show all products initially
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -42,14 +41,17 @@ const Product = () => {
     navigate("/admin/productsForm");
   };
 
-  const handleFormChange = (e) => {
-    const { name, value, type, files } = e.target;
-    setProducts({
-      ...products,
-      [name]: type === "file" ? files : value,
-    });
+  const filterProducts = (visibility) => {
+    setSelectedFilter(visibility);
+    const filtered = products.filter((product) => product.hien === visibility);
+    setFilteredProducts(filtered);
   };
 
+  const showAllProducts = () => {
+    setSelectedFilter(null);
+    setFilteredProducts(products);
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -67,15 +69,14 @@ const Product = () => {
   };
 
   const getCategoryName = (categoryId) => {
-    console.log("Looking for categoryId:", categoryId);
     const category = categories.find((cat) => cat.id === categoryId);
-    console.log("Found category:", category);
     return category ? category.categories_name : "Không tìm thấy";
   };
 
   return (
     <main className="container mt-5">
       <div className="mb-4">
+        <div className="mb-3">
         <form className="d-flex mb-4" onSubmit={handleSubmit}>
           <input
             className="form-control me-2"
@@ -104,33 +105,29 @@ const Product = () => {
             Tìm
           </button>
         </form>
-        <div className="mb-3">
           <a className="btn btn-success me-2" onClick={handleAddClick}>
             Thêm sản phẩm mới
           </a>
-          <a className="btn btn-primary me-2" href="/products-hidden">
-            Sản phẩm ẩn
-          </a>
-          <a className="btn btn-primary me-2" href="/products-visible">
+          <a
+            className={`btn btn-primary me-2 ${selectedFilter === false ? "active" : ""}`}
+            onClick={() => filterProducts(false)}
+          >
             Sản phẩm hiện
           </a>
+          <a
+            className={`btn btn-primary me-2 ${selectedFilter === true ? "active" : ""}`}
+            onClick={() => filterProducts(true)}
+          >
+            Sản phẩm ẩn
+          </a>
+          <a
+            className={`btn btn-secondary me-2 ${selectedFilter === null ? "active" : ""}`}
+            onClick={showAllProducts}
+          >
+            Tất cả sản phẩm
+          </a>
           <br />
           <br />
-          <form action="/search-by-category" method="get" className="d-inline">
-            <select
-              className="form-select"
-              name="categories_id"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="-1">Tìm theo danh mục</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.categories_name}
-                </option>
-              ))}
-            </select>
-          </form>
         </div>
         <div className="table-responsive">
           <table className="table table-hover table-sm">
@@ -147,7 +144,7 @@ const Product = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((item) => (
+              {filteredProducts.map((item) => (
                 <tr key={item.id}>
                   <td>{item.product_name}</td>
                   <td>

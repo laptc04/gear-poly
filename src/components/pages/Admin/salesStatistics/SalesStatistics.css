@@ -1,0 +1,32 @@
+.sales-statistics-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+}
+
+.statistics-info {
+    flex: 1;
+    max-width: 300px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-chart {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-chart > div {
+    width: 100%;
+    max-width: 900px; /* Adjust the max-width to fit the chart neatly */
+    height: 500px; /* Adjust the height to ensure it fits within the layout */
+}

@@ -6,13 +6,27 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 const SalesStatisticsChart = ({ data }) => {
     const chartData = {
-        labels: ['Today', 'Last Month', 'Last Year'],
+        labels: [''],
         datasets: [
             {
-                label: 'Revenue',
-                data: [data.revenueToday, data.revenueLastMonth, data.revenueLastYear],
+                label: 'Doanh thu hôm nay',
+                data: [data.revenueToday],
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            },
+            {
+                label: 'Doanh thu tháng trước',
+                data: [data.revenueLastMonth],
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1,
+            },
+            {
+                label: 'Doanh thu năm trước',
+                data: [data.revenueLastYear],
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgba(255, 159, 64, 1)',
                 borderWidth: 1,
             },
         ],
@@ -27,7 +41,23 @@ const SalesStatisticsChart = ({ data }) => {
             tooltip: {
                 callbacks: {
                     label: function(context) {
-                        return `$${context.raw.toFixed(2)}`;
+                        const value = context.raw;
+                        const formattedValue = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                        return `${context.dataset.label}: ${formattedValue}`;
+                    },
+                },
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Thống kê (VNĐ)',
+                },
+                ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
                     },
                 },
             },
@@ -36,7 +66,7 @@ const SalesStatisticsChart = ({ data }) => {
 
     return (
         <div>
-            <h3>Revenue Statistics</h3>
+            {/* <h3>Bảng thống kê - cột</h3> */}
             <Bar data={chartData} options={options} />
         </div>
     );
