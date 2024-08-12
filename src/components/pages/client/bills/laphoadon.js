@@ -3,7 +3,7 @@ import { findCartbyAccountId, findAccountId } from "../../../../services/Bill";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useCookies } from "react-cookie";
-
+import { useNavigate } from "react-router-dom";
 const Laphoadon = () => {
   const [listCart, setListCart] = useState([]);
   const [id, setId] = React.useState("");
@@ -59,7 +59,7 @@ const Laphoadon = () => {
 
   const totalPrice = listCart.reduce((acc, item) => acc + item.price, 0);
   const formatNumber = (num) => num?.toLocaleString("de-DE");
-
+  const navigate = useNavigate();
   const [account, setAccount] = useState();
   const [fullname, setFullname] = useState();
   const [phone, setPhone] = useState();
@@ -139,16 +139,17 @@ const Laphoadon = () => {
           timer: 1500,
           icon: "success",
         });
+        navigate(`/user/userinfo`);
       } else {
         Swal.fire({
-          title: "Can not add to cart",
+          title: "Gửi thất bại",
           timer: 1500,
           icon: "error",
         });
       }
     } catch (error) {
       Swal.fire({
-        title: "An error occurred",
+        title: "Gửi thất bại",
         timer: 1500,
         icon: "error",
       });
