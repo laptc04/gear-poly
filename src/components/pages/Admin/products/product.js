@@ -54,21 +54,24 @@ const Product = () => {
     setFilteredProducts(products);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.get('http://localhost:8080/api/products/searchProd', {
-  //         params: {
-  //             product_name: product_name || "",
-  //             minPrice: minPrice || "",
-  //             maxPrice: maxPrice || "",
-  //         },
-  //     });
-  //     setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
-  // } catch (error) {
-  //     console.error('Error searching products:', error);
-  // }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/products/searchProd",
+        {
+          params: {
+            product_name: product_name || "",
+            minPrice: minPrice || "",
+            maxPrice: maxPrice || "",
+          },
+        }
+      );
+      setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
+    } catch (error) {
+      console.error("Error searching products:", error);
+    }
+  };
 
   const getCategoryName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
@@ -79,34 +82,34 @@ const Product = () => {
     <main className="container mt-5">
       <div className="mb-4">
         <div className="mb-3">
-          {/* <form className="d-flex mb-4" onSubmit={handleSubmit}>
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Tìm kiếm theo tên"
-            value={product_name}
-            onChange={(e) => setProduct_Name(e.target.value)}
-          />
-          <input
-            className="form-control me-2"
-            type="number"
-            placeholder="Giá thấp nhất"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            min="0"
-          />
-          <input
-            className="form-control me-2"
-            type="number"
-            placeholder="Giá cao nhất"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            min="0"
-          />
-          <button className="btn btn-outline-success" type="submit">
-            Tìm
-          </button>
-        </form> */}
+          <form className="d-flex mb-4" onSubmit={handleSubmit}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Tìm kiếm theo tên"
+              value={product_name}
+              onChange={(e) => setProduct_Name(e.target.value)}
+            />
+            <input
+              className="form-control me-2"
+              type="number"
+              placeholder="Giá thấp nhất"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              min="0"
+            />
+            <input
+              className="form-control me-2"
+              type="number"
+              placeholder="Giá cao nhất"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              min="0"
+            />
+            <button className="btn btn-outline-success" type="submit">
+              Tìm
+            </button>
+          </form>
           <a className="btn btn-success me-2" onClick={handleAddClick}>
             Thêm sản phẩm mới
           </a>
