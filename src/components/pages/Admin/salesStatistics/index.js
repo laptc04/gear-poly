@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SalesStatisticsChart from './SalesStatisticsChart'; // Import the new chart component
+import './SalesStatistics.css';
 
 const SalesStatistics = () => {
     const [statistics, setStatistics] = useState([]);
@@ -18,13 +19,21 @@ const SalesStatistics = () => {
         }
     };
 
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+
     return (
-        <div>
-            <h2>Sales Statistics</h2>
-            <p>Total Products: {statistics.totalProducts}</p>
-            <p>Total Quantity Sold: {statistics.totalQuantitySold}</p>
-            <p>Total Revenue: ${statistics.totalRevenue}</p>
-            <SalesStatisticsChart data={statistics} />
+        <div className="sales-statistics-container">
+            <aside className="statistics-info">
+                <h2><strong>Bản thống kê</strong></h2>
+                <p><strong>Tổng sản phẩm:</strong> {statistics.totalProducts}</p>
+                <p><strong>Tổng số lượng bán được:</strong> {statistics.totalQuantitySold}</p>
+                <p><strong>Tổng doanh thu:</strong> {formatCurrency(statistics.totalRevenue)}</p>
+            </aside>
+            <article className="statistics-chart">
+                <SalesStatisticsChart data={statistics} />
+            </article>
         </div>
     );
 };

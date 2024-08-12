@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import "./css/footerAdmin.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
@@ -21,9 +20,12 @@ import Index from "./components/pages/client/index";
 import AdminLayout from "./components/navbar/admin/adminLayout";
 import Kho from "./components/pages/Admin/warehouse/kho";
 import Qluser from "./components/pages/Admin/users/qltkuser";
-import ThongKeTongChiTieu from "./components/pages/Admin/statistics/totalnam";
 import Product from "./components/pages/Admin/products/product";
+import ProductFrom from "./components/pages/Admin/products/productForm";
 import Categoties from "./components/pages/Admin/categories/categories";
+import CategotiesForm from "./components/pages/Admin/categories/categoriesForm";
+import SalesStatistics from "./components/pages/Admin/salesStatistics";
+
 
 function App() {
   return (
@@ -54,10 +56,15 @@ function App() {
             {/* admin */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="home" element={<Qluser />} />
-              <Route path="product" element={<Product />} />
-              <Route path="category" element={<Categoties />} />
-              <Route path="statistics" element={<ThongKeTongChiTieu />} />
+              <Route path="products" element={<Product />} />
+              <Route path="productsForm" element={<ProductFrom />} />
+              <Route path="productsForm/:id" element={<ProductFrom />} />
+              <Route path="categories" element={<Categoties />} />
+              <Route path="categoriesForm" element={<CategotiesForm />} />
+              <Route path="categoriesForm/:id" element={<CategotiesForm />} />
+              {/* <Route path="statistics" element={<ThongKeTongChiTieu />} /> */}
               <Route path="wherehouse" element={<Kho />} />
+              <Route path="salesstatistics" element={<SalesStatistics />} />
             </Route>
           </Routes>
         </div>
