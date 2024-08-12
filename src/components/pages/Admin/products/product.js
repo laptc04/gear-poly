@@ -53,7 +53,7 @@ const Product = () => {
     setSelectedFilter(null);
     setFilteredProducts(products);
   };
-  
+
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -62,7 +62,7 @@ const Product = () => {
   //             product_name: product_name || "",
   //             minPrice: minPrice || "",
   //             maxPrice: maxPrice || "",
-  //         }, 
+  //         },
   //     });
   //     setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
   // } catch (error) {
@@ -79,7 +79,7 @@ const Product = () => {
     <main className="container mt-5">
       <div className="mb-4">
         <div className="mb-3">
-        {/* <form className="d-flex mb-4" onSubmit={handleSubmit}>
+          {/* <form className="d-flex mb-4" onSubmit={handleSubmit}>
           <input
             className="form-control me-2"
             type="search"
@@ -111,19 +111,25 @@ const Product = () => {
             Thêm sản phẩm mới
           </a>
           <a
-            className={`btn btn-primary me-2 ${selectedFilter === false ? "active" : ""}`}
+            className={`btn btn-primary me-2 ${
+              selectedFilter === false ? "active" : ""
+            }`}
             onClick={() => filterProducts(false)}
           >
             Sản phẩm hiện
           </a>
           <a
-            className={`btn btn-primary me-2 ${selectedFilter === true ? "active" : ""}`}
+            className={`btn btn-primary me-2 ${
+              selectedFilter === true ? "active" : ""
+            }`}
             onClick={() => filterProducts(true)}
           >
             Sản phẩm ẩn
           </a>
           <a
-            className={`btn btn-secondary me-2 ${selectedFilter === null ? "active" : ""}`}
+            className={`btn btn-secondary me-2 ${
+              selectedFilter === null ? "active" : ""
+            }`}
             onClick={showAllProducts}
           >
             Tất cả sản phẩm
@@ -231,9 +237,7 @@ const Product = () => {
                   </td>
                   <td>
                     <div className="d-flex align-items-center">
-                      <span className="ms-2">
-                        {item.hien ? "Ẩn" : "Hiện"}
-                      </span>
+                      <span className="ms-2">{item.hien ? "Ẩn" : "Hiện"}</span>
                     </div>
                   </td>
                   <td>
