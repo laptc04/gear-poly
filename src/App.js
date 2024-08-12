@@ -61,7 +61,7 @@ function App() {
               <Route path="products" element={<Product />} />
               <Route path="bill" element={<ProductCustomerDetails />} />
               <Route path="bill/:id/:detailBillId" element={<DetaillBill />} />
-              <Route path="statistics" element={<ThongKeTongChiTieu />} />
+              {/* <Route path="statistics" element={<ThongKeTongChiTieu />} /> */}
               <Route path="productsForm" element={<ProductFrom />} />
               <Route path="productsForm/:id" element={<ProductFrom />} />
               <Route path="categories" element={<Categoties />} />

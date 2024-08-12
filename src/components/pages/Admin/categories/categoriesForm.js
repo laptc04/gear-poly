@@ -37,11 +37,18 @@ const CategoriesForm = () => {
         : axios.post(`http://localhost:8080/api/categories`, values);
 
       await apiCall;
-      toast.success(id ? "Cập nhật danh mục thành công!" : "Thêm danh mục thành công!");
+      toast.success(
+        id ? "Cập nhật danh mục thành công!" : "Thêm danh mục thành công!"
+      );
       setTimeout(() => navigate("/admin/categories"), 1500);
     } catch (error) {
-      console.error("Request failed:", error.response || error.message || error);
-      toast.error(id ? "Cập nhật danh mục thất bại!" : "Thêm danh mục thất bại!");
+      console.error(
+        "Request failed:",
+        error.response || error.message || error
+      );
+      toast.error(
+        id ? "Cập nhật danh mục thất bại!" : "Thêm danh mục thất bại!"
+      );
     }
   };
 
@@ -78,7 +85,9 @@ const CategoriesForm = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     error={touched.categories_name && !!errors.categories_name}
-                    helperText={touched.categories_name && errors.categories_name}
+                    helperText={
+                      touched.categories_name && errors.categories_name
+                    }
                   />
                 </Box>
               </Grid>

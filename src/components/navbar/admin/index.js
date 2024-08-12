@@ -13,7 +13,7 @@ const AdminNavbar = () => {
   };
   return (
     <Navbar bg="light" expand="lg" fixed="top">
-      <Navbar.Brand href="#">
+      <Navbar.Brand href="/admin/home">
         <FontAwesomeIcon icon={faUserCircle} /> ADMIN
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav">
@@ -27,13 +27,13 @@ const AdminNavbar = () => {
           <Nav.Link href="/admin/products" title="SẢN PHẨM">
             SẢN PHẨM
           </Nav.Link>
-          <Nav.Link href="/admin/category" title="DANH MỤC">
+          <Nav.Link href="/admin/categories" title="DANH MỤC">
             DANH MỤC
           </Nav.Link>
           <Nav.Link href="/admin/bill" title="ĐƠN HÀNG">
             ĐƠN HÀNG
           </Nav.Link>
-          <Nav.Link href="/admin/statistics" title="THỐNG KÊ">
+          <Nav.Link href="/admin/salesstatistics" title="THỐNG KÊ">
             THỐNG KÊ
           </Nav.Link>
           <Nav.Link onClick={handleLogout}>ĐĂNG XUÁT</Nav.Link>
