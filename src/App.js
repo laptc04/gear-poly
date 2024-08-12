@@ -66,8 +66,13 @@ function App() {
               <Route path="productsForm/:id" element={<ProductFrom />} />
               <Route path="categories" element={<Categoties />} />
               <Route path="categoriesForm" element={<CategotiesForm />} />
+              <Route path="categoriesForm/:id" element={<CategotiesForm />} />
               <Route path="invoice-status" element={<Invoice />} />
               <Route path="invoice-statusFrom" element={<InvoiceStatus />} />
+              <Route
+                path="invoice-statusFrom/:id"
+                element={<InvoiceStatus />}
+              />
               {/* <Route path="statistics" element={<ThongKeTongChiTieu />} /> */}
               <Route path="wherehouse" element={<Kho />} />
               <Route path="salesstatistics" element={<SalesStatistics />} />
