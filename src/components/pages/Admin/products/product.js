@@ -23,9 +23,11 @@ const Product = () => {
           axios.get("http://localhost:8080/api/categories"),
         ]);
 
+        console.log("Products:", productResponse.data);
+        console.log("Categories:", categoryResponse.data);
         setProducts(productResponse.data);
         setCategories(categoryResponse.data);
-        setFilteredProducts(productResponse.data); // Show all products initially
+        setFilteredProducts(productResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -52,21 +54,21 @@ const Product = () => {
     setFilteredProducts(products);
   };
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get('http://localhost:8080/api/products/searchProd', {
-          params: {
-              product_name: product_name || "",
-              minPrice: minPrice || "",
-              maxPrice: maxPrice || "",
-          }, 
-      });
-      setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
-  } catch (error) {
-      console.error('Error searching products:', error);
-  }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.get('http://localhost:8080/api/products/searchProd', {
+  //         params: {
+  //             product_name: product_name || "",
+  //             minPrice: minPrice || "",
+  //             maxPrice: maxPrice || "",
+  //         }, 
+  //     });
+  //     setProducts(response.data); // Cập nhật danh sách sản phẩm sau khi tìm kiếm
+  // } catch (error) {
+  //     console.error('Error searching products:', error);
+  // }
+  // };
 
   const getCategoryName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
@@ -77,7 +79,7 @@ const Product = () => {
     <main className="container mt-5">
       <div className="mb-4">
         <div className="mb-3">
-        <form className="d-flex mb-4" onSubmit={handleSubmit}>
+        {/* <form className="d-flex mb-4" onSubmit={handleSubmit}>
           <input
             className="form-control me-2"
             type="search"
@@ -104,7 +106,7 @@ const Product = () => {
           <button className="btn btn-outline-success" type="submit">
             Tìm
           </button>
-        </form>
+        </form> */}
           <a className="btn btn-success me-2" onClick={handleAddClick}>
             Thêm sản phẩm mới
           </a>
@@ -247,7 +249,7 @@ const Product = () => {
             </tbody>
           </table>
         </div>
-        <nav aria-label="Page navigation">
+        {/* <nav aria-label="Page navigation">
           <ul className="pagination">
             <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
               <a
@@ -286,7 +288,7 @@ const Product = () => {
               </a>
             </li>
           </ul>
-        </nav>
+        </nav> */}
       </div>
     </main>
   );
