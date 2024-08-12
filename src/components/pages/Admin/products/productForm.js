@@ -81,7 +81,7 @@ const ProductForm = () => {
       ...values,
       price: parseFloat(values.price),
       soLuong: parseInt(values.soLuong, 10),
-      hien: values.hien  ? "true" : "false",
+      hien: values.hien,
       categories_id: values.categories_id,
     };
     console.log("Giá trị hien trước khi gửi:", values.hien);
