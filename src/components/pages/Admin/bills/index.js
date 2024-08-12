@@ -104,14 +104,16 @@ const ProductCustomerDetails = ({ searchForm, notFoundMessage, size }) => {
   };
   const handleUpdateStatus = async (statusId, invoiceId) => {
     const newData = {
-      status_id: statusId,
       id: invoiceId,
+      invoice_status: {
+        id: statusId,
+      },
     };
     console.log(statusId);
     console.log(invoiceId);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/bill/updateStatusBill",
+        "http://localhost:8080/api/bill/updatestatusbill",
         newData
       );
       if (response.status === 201) {
