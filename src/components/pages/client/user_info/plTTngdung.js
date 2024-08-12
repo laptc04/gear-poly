@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { fetchBillByAccountId, findAccountId } from "../../../../services/Bill";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Login from "../Login/login";
+
 // const GradientText = styled.h2`
 //   font-size: 72px;
 //   background: -webkit-linear-gradient(#dd93e0, #333);
@@ -144,9 +146,39 @@ const TTngdung = () => {
   const [listBill, setListBill] = useState([]);
   const [userId, setUserId] = React.useState("");
   const [cookies, setCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedOriginalToken = sessionStorage.getItem("originalToken");
+    const storedOriginalTokenRole = sessionStorage.getItem("originalTokenRole");
+    const giaimarole = decodeURIComponent(
+      escape(atob(storedOriginalTokenRole.split("_")[0]))
+    );
+    if (cookies.token === null) {
+      setCookie("token", storedOriginalToken, {
+        HttpOnly: true,
+        Secure: true,
+        path: "/",
+        expires: new Date(Date.now() + 3600 * 1000),
+      });
+    } else if (cookies.role === null) {
+      setCookie("role", storedOriginalTokenRole, {
+        HttpOnly: true,
+        Secure: true,
+        path: "/",
+        expires: new Date(Date.now() + 3600 * 1000),
+      });
+    }
+    if (
+      cookies.token === null ||
+      storedOriginalToken === null ||
+      (cookies.role === null && storedOriginalTokenRole === null)
+    ) {
+      navigate(`/user/login`);
+    } else if (giaimarole === "false") {
+      navigate(`/user/home`);
+    }
+
     if (cookies.token && storedOriginalToken) {
       try {
         // Giải mã token hiện tại từ cookie
@@ -159,7 +191,7 @@ const TTngdung = () => {
         );
         const originalUserId = originalDecodedToken.split("_")[0];
 
-        if (cookies.token !== storedOriginalToken) {
+        if (cookies.token !== storedOriginalToken || cookies.token === null) {
           console.log("Token đã thay đổi, đặt lại token gốc.");
           setCookie("token", storedOriginalToken, {
             HttpOnly: true,
@@ -169,6 +201,14 @@ const TTngdung = () => {
           });
         } else {
           setUserId(originalUserId); // Đặt ID người dùng vào trạng thái
+        }
+        if (cookies.role !== storedOriginalTokenRole || cookies.role === null) {
+          setCookie("role", storedOriginalTokenRole, {
+            HttpOnly: true,
+            Secure: true,
+            path: "/",
+            expires: new Date(Date.now() + 3600 * 1000),
+          });
         }
       } catch (error) {
         console.error("Lỗi khi kiểm tra token:", error);

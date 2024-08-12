@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../../../../services/Auth";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import "./login.css";
 
@@ -31,13 +31,17 @@ const Login = () => {
         console.log(cookies);
         // setCookie(account)
         // // Lưu vai trò người dùng vào cookie
-        const roleValue = role ? "true" : "false";
-        setCookie("role", roleValue, { path: "/", expires: date });
-
         const uniqueElement = Math.random();
+        const uniqueElementrole = Math.random();
+        const roleValue = role ? "true" : "false";
+
         const encodedUserId = btoa(
           unescape(encodeURIComponent(`${account.id}_${uniqueElement}`))
         );
+        const encodedRole = btoa(
+          unescape(encodeURIComponent(`${roleValue}_${uniqueElementrole}`))
+        );
+        setCookie("role", encodedRole, { path: "/", expires: date });
         setCookie("token", encodedUserId, {
           HttpOnly: true,
           Secure: true,
@@ -45,6 +49,7 @@ const Login = () => {
           expires: new Date(Date.now() + 3600 * 1000),
         });
         sessionStorage.setItem("originalToken", encodedUserId);
+        sessionStorage.setItem("originalTokenRole", encodedRole);
         // const encodedUserIdrole = btoa(unescape(encodeURIComponent(data?.vaiTro)));
         console.log(data?.id);
         // setCookie("user", encodedUserId, { expires: date });
@@ -121,7 +126,6 @@ const Login = () => {
                   Tạo tài khoản mới?
                 </Link>
               </div>
-
             </div>
           </div>
         </div>
